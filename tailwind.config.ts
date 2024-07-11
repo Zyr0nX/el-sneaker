@@ -6,6 +6,7 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/ui/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
@@ -23,16 +24,16 @@ const config: Config = {
           600: "#5D5D5D",
           700: "#4F4F4F",
           800: "#454545",
-          900: "#131313"
+          900: "#131313",
         },
         brand: {
           50: "#FFF3E8",
           100: "#FFDEC0",
           200: "#FFC58E",
           300: "#FF914C",
-          500: "#FF7B21"
-        }
-      }
+          500: "#FF7B21",
+        },
+      },
     },
   },
   plugins: [],

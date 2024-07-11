@@ -17,7 +17,7 @@ export default async function Header() {
   // console.log(headerContent.links);
   if (!headerContent) return null;
   return (
-    <header className="bg-white h-[4.6875rem] flex justify-between px-[6.25rem]">
+    <header className="bg-white h-[4.6875rem] flex justify-between px-[6.25rem] items-center">
       <div className="font-gilroy font-bold text-[2.5rem] text-neutral-900">
         {headerContent.logo && (
           <PortableText value={headerContent.logo} components={components} />

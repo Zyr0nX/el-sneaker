@@ -366,3 +366,25 @@ export type HeaderQueryResult = {
     _key: string;
   } & Link>;
 } | null;
+// Source: ./src/components/hero.tsx
+// Variable: bannerQuery
+// Query: *[_type == "banner"][0]
+export type BannerQueryResult = {
+  _id: string;
+  _type: "banner";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  images?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
+} | null;

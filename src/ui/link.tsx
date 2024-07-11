@@ -15,7 +15,7 @@ const styles = tv({
   base: "",
   variants: {
     variant: {
-      primary: "bg-brand-500 px-4 py-2.5 rounded-full",
+      primary: "bg-brand-500 px-4 py-2.5 rounded-full text-neutral-50 font-semibold",
       // secondary:
       //   "text-gray-700 dark:text-zinc-300 underline decoration-gray-700/50 hover:decoration-gray-700 dark:decoration-zinc-300/70 dark:hover:decoration-zinc-300",
     },
