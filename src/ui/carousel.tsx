@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import React, { ReactElement } from "react";
@@ -41,52 +41,54 @@ let button = tv({
   },
 });
 
-export function Carousel({ children }: { children: ReactElement | ReactElement[] }) {
+export function Carousel({
+  children,
+}: {
+  children: ReactElement | ReactElement[];
+}) {
   return (
-    <RACCarousel className="relative">
-      <div className="">
-        <CarouselButton
-          dir="prev"
-          className="bg-neutral-900/30 h-9 w-9 rounded-full flex justify-center items-center absolute top-1/2 -translate-y-1/2 left-5"
-        >
-          <ArrowLeft />
-        </CarouselButton>
-        <CarouselButton
-          dir="next"
-          className="bg-neutral-900/30 h-9 w-9 rounded-full flex justify-center items-center absolute top-1/2 -translate-y-1/2 right-5"
-        >
-          <ArrowRight />
-        </CarouselButton>
-      </div>
-      <CarouselScroller className="grid overflow-hidden scroll-snap-x-mandatory grid-flow-col aspect-video object-cover">
+    <RACCarousel
+      className="relative"
+      loop="infinite"
+      mouseDragging
+      spaceBetweenItems="1rem"
+      autoplay
+      autoplayInterval={5000}
+    >
+      <CarouselButton
+        dir="prev"
+        className="bg-neutral-900/30 h-9 w-9 rounded-full flex justify-center items-center absolute top-1/2 -translate-y-1/2 left-5"
+      >
+        <ArrowLeft />
+      </CarouselButton>
+      <CarouselButton
+        dir="next"
+        className="bg-neutral-900/30 h-9 w-9 rounded-full flex justify-center items-center absolute top-1/2 -translate-y-1/2 right-5"
+      >
+        <ArrowRight />
+      </CarouselButton>
+      <CarouselScroller className="grid overflow-hidden snap-x snap-mandatory grid-flow-col object-cover">
         {children}
       </CarouselScroller>
-      {/* <CarouselTabs className="grid-area-tabs flex gap-4">
-        {[0, 1, 2, 3].map((index) => (
+      <CarouselTabs className="flex gap-4 absolute left-1/2 -translate-y-1/2 bottom-8">
+        {(item) => (
           <CarouselTab
-            key={index}
-            className={`bg-gray-600 text-gray-1200 text-sm rounded-md px-2 ${
-              item.index === index ? "bg-darkgrey" : ""
-            }`}
-            index={index}
-          >
-            {index + 1}
-          </CarouselTab>
-        ))}
-      </CarouselTabs> */}
+            className={`w-3 h-3 rounded-full ${item.isSelected ? "bg-brand-500" : " bg-white"}`}
+            index={item.index}
+          />
+        )}
+      </CarouselTabs>
     </RACCarousel>
   );
 }
 
-// function Item({ src, alt }: { src: string, alt: string }) {
-//   return (
-//     <CarouselItem className="aspect-[3/2]">
-//       <Image src={src} alt={alt} />
-//     </CarouselItem>
-//   );
-// }
-
-export function CarouselItem({ index, children }: { index: number, children: React.ReactNode }) {
+export function CarouselItem({
+  index,
+  children,
+}: {
+  index: number;
+  children: React.ReactNode;
+}) {
   return (
     <RACCarouselItem className="">
       {children}
