@@ -83,16 +83,13 @@ export function Carousel({
 }
 
 export function CarouselItem({
-  index,
   children,
 }: {
-  index: number;
   children: React.ReactNode;
 }) {
   return (
-    <RACCarouselItem className="">
+    <RACCarouselItem>
       {children}
-      {/* <Image src={src} alt={alt} /> */}
     </RACCarouselItem>
   );
 }

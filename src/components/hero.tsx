@@ -18,9 +18,8 @@ export default async function Banner() {
   console.log(bannerContent);
   return (
     <Carousel>
-      {bannerContent.images &&
-        bannerContent.images.map((image) => (
-          <CarouselItem key={image._key} index={0}>
+      {bannerContent.images.map((image) => (
+          <CarouselItem key={image._key}>
             <Image key={image._key} id={image.asset?._ref} alt={""} />
           </CarouselItem>
         ))}
