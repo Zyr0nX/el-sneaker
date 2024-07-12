@@ -6,7 +6,10 @@ import { components } from "~/utils/portabletext/components";
 import { Link } from "~/ui/link";
 
 export default async function Header() {
-  const headerQuery = groq`*[_type == "header"][0]`;
+  const headerQuery = groq`*[_type == "header"][0]{
+    logo,
+    links[]{_key, url, text}
+    }`;
   const headerContent = await client.fetch<HeaderQueryResult>(
     headerQuery,
     {},
@@ -14,7 +17,7 @@ export default async function Header() {
       next: { tags: ["header"] },
     }
   );
-  // console.log(headerContent.links);
+  
   if (!headerContent) return null;
   return (
     <header className="bg-white h-[4.6875rem] flex justify-between px-[6.25rem] items-center">
@@ -23,12 +26,13 @@ export default async function Header() {
           <PortableText value={headerContent.logo} components={components} />
         )}
       </div>
-      <div className="">
-        {headerContent.links && headerContent.links.map((link) => (
-          <Link key={link._key} href={link.url}>{link.text}</Link>
-        ))}
-        {/* <Link href="/">Home</Link>
-        {headerContent.links} */}
+      <div>
+        {headerContent.links &&
+          headerContent.links.map((link) => (
+            <Link key={link._key} href={link.url}>
+              {link.text}
+            </Link>
+          ))}
       </div>
     </header>
   );

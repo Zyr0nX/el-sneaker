@@ -6,7 +6,9 @@ import { BannerQueryResult } from "../../sanity.types";
 import { Image } from "~/utils/sanity/image";
 
 export default async function Banner() {
-  const bannerQuery = groq`*[_type == "banner"][0]`;
+  const bannerQuery = groq`*[_type == "banner"][0]{
+    images[]{_key, 'ref':asset._ref}
+    }`;
   const bannerContent = await client.fetch<BannerQueryResult>(
     bannerQuery,
     {},
@@ -15,14 +17,17 @@ export default async function Banner() {
     }
   );
   if (!bannerContent || !bannerContent.images) return null;
-  console.log(bannerContent);
   return (
     <Carousel>
       {bannerContent.images.map((image) => (
-          <CarouselItem key={image._key}>
-            <Image key={image._key} id={image.asset?._ref} alt={""} />
-          </CarouselItem>
-        ))}
+        <CarouselItem key={image._key}>
+          <Image
+            id={image.ref}
+            alt={""}
+            className="w-full aspect-[2/1] object-cover"
+          />
+        </CarouselItem>
+      ))}
     </Carousel>
   );
 }

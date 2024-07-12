@@ -6,7 +6,7 @@ import { tv } from 'tailwind-variants';
 // import { focusRing } from './utils';
 
 interface LinkProps extends AriaLinkProps {
-  variant?: 'primary' 
+  variant?: 'primary' | 'link'
   // | 'secondary'
 }
 
@@ -16,6 +16,7 @@ const styles = tv({
   variants: {
     variant: {
       primary: "bg-brand-500 px-4 py-2.5 rounded-full text-neutral-50 font-semibold",
+      link: ""
       // secondary:
       //   "text-gray-700 dark:text-zinc-300 underline decoration-gray-700/50 hover:decoration-gray-700 dark:decoration-zinc-300/70 dark:hover:decoration-zinc-300",
     },

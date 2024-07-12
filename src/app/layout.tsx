@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="text-neutral-950">
         <ClientProviders>{children}</ClientProviders>
       </body>
     </html>

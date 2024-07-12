@@ -68,12 +68,6 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type Link = {
-  _type: "link";
-  text: string;
-  url: string;
-};
-
 export type Header = {
   _id: string;
   _type: "header";
@@ -145,8 +139,7 @@ export type Trending = {
   _updatedAt: string;
   _rev: string;
   title?: string;
-  viewAllLabel?: string;
-  viewAllLink?: string;
+  viewAllLink?: Link;
   sneakers?: Array<{
     _ref: string;
     _type: "reference";
@@ -154,6 +147,12 @@ export type Trending = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "sneaker";
   }>;
+};
+
+export type Link = {
+  _type: "link";
+  text: string;
+  url: string;
 };
 
 export type Size = {
@@ -335,18 +334,13 @@ export type HslaColor = {
   a?: number;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Link | Header | RichText | Banner | Trending | Size | Sneaker | Collection | Brand | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Slug | Color | RgbaColor | HsvaColor | HslaColor;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Header | RichText | Banner | Trending | Link | Size | Sneaker | Collection | Brand | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Slug | Color | RgbaColor | HsvaColor | HslaColor;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/components/header.tsx
 // Variable: headerQuery
-// Query: *[_type == "header"][0]
+// Query: *[_type == "header"][0]{    logo,    links[]{_key, url, text}    }
 export type HeaderQueryResult = {
-  _id: string;
-  _type: "header";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  logo?: Array<{
+  logo: Array<{
     children?: Array<{
       marks?: Array<string>;
       text?: string;
@@ -361,30 +355,40 @@ export type HeaderQueryResult = {
     level?: number;
     _type: "block";
     _key: string;
-  }>;
-  links?: Array<{
+  }> | null;
+  links: Array<{
     _key: string;
-  } & Link>;
+    url: string;
+    text: string;
+  }> | null;
 } | null;
 // Source: ./src/components/hero.tsx
 // Variable: bannerQuery
-// Query: *[_type == "banner"][0]
+// Query: *[_type == "banner"][0]{    images[]{_key, 'ref':asset._ref}    }
 export type BannerQueryResult = {
-  _id: string;
-  _type: "banner";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  images?: Array<{
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
+  images: Array<{
     _key: string;
-  }>;
+    ref: string | null;
+  }> | null;
+} | null;
+// Source: ./src/components/trending.tsx
+// Variable: trendingQuery
+// Query: *[_type == "trending"][0]{    title,    viewAllLink,    'sneakers': sneakers[]->{      _id,      name,      price,      slug{current},      brand->{name},      "image":images[0]{'ref':asset._ref},    }}
+export type TrendingQueryResult = {
+  title: string | null;
+  viewAllLink: Link | null;
+  sneakers: Array<{
+    _id: string;
+    name: string | null;
+    price: number | null;
+    slug: {
+      current: string;
+    } | null;
+    brand: {
+      name: string | null;
+    } | null;
+    image: {
+      ref: string | null;
+    } | null;
+  }> | null;
 } | null;
