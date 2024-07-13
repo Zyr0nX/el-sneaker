@@ -1,14 +1,18 @@
 import localFont from "next/font/local";
 
-// Font files can be colocated inside of `app`
-const myFont = localFont({
+export const gilroy = localFont({
   src: [
     {
-      path: "./Gilroy-bold.woff2",
+      path: "./Gilroy-Bold.otf",
       weight: "700",
-      style: "normal"
-    }
+      style: "normal",
+    },
+    {
+      path: "./Gilroy-ExtraBold.otf",
+      weight: "800",
+      style: "normal",
+    },
   ],
   display: "swap",
-  variable: "--font-gilroy"
+  variable: "--font-gilroy",
 });

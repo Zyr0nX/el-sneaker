@@ -68,6 +68,58 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type Footer = {
+  _id: string;
+  _type: "footer";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  button?: Link;
+  logo?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      _key: string;
+    } & Color>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  socialPlatform?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "social";
+  }>;
+  additionalInformation?: Array<string>;
+  socialPlatformIcon?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "social";
+  }>;
+};
+
+export type Social = {
+  _id: string;
+  _type: "social";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  socialPlatform: "facebook" | "instagram" | "zalo" | "email" | "phoneNumber" | "website";
+  title?: string;
+  link?: Link;
+};
+
 export type Header = {
   _id: string;
   _type: "header";
@@ -229,11 +281,7 @@ export type Collection = {
 };
 
 export type Brand = {
-  _id: string;
   _type: "brand";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
   name?: string;
   slug?: Slug;
 };
@@ -334,8 +382,43 @@ export type HslaColor = {
   a?: number;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Header | RichText | Banner | Trending | Link | Size | Sneaker | Collection | Brand | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Slug | Color | RgbaColor | HsvaColor | HslaColor;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Footer | Social | Header | RichText | Banner | Trending | Link | Size | Sneaker | Collection | Brand | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Slug | Color | RgbaColor | HsvaColor | HslaColor;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./src/components/footer.tsx
+// Variable: footerQuery
+// Query: *[_type == "footer"][0]{    title,    logo,    additionalInformation,    'socialPlatformIcon': socialPlatformIcon[]->{      socialPlatform,      link    },    'socialPlatform': socialPlatform[]->{      title,      link    },    button{      text    },    links[]{_key, url, text}    }
+export type FooterQueryResult = {
+  title: string | null;
+  logo: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      _key: string;
+    } & Color>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
+  additionalInformation: Array<string> | null;
+  socialPlatformIcon: Array<{
+    socialPlatform: "email" | "facebook" | "instagram" | "phoneNumber" | "website" | "zalo";
+    link: Link | null;
+  }> | null;
+  socialPlatform: Array<{
+    title: string | null;
+    link: Link | null;
+  }> | null;
+  button: {
+    text: string;
+  } | null;
+  links: null;
+} | null;
 // Source: ./src/components/header.tsx
 // Variable: headerQuery
 // Query: *[_type == "header"][0]{    logo,    links[]{_key, url, text}    }
@@ -384,9 +467,7 @@ export type TrendingQueryResult = {
     slug: {
       current: string;
     } | null;
-    brand: {
-      name: string | null;
-    } | null;
+    brand: null;
     image: {
       ref: string | null;
     } | null;

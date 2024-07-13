@@ -1,12 +1,16 @@
-"use client"
+"use client";
 
-import React from 'react';
-import { Link as AriaLink, LinkProps as AriaLinkProps, composeRenderProps } from 'react-aria-components';
-import { tv } from 'tailwind-variants';
+import React from "react";
+import {
+  Link as AriaLink,
+  LinkProps as AriaLinkProps,
+  composeRenderProps,
+} from "react-aria-components";
+import { tv } from "tailwind-variants";
 // import { focusRing } from './utils';
 
 interface LinkProps extends AriaLinkProps {
-  variant?: 'primary' | 'link'
+  variant?: "primary" | "link" | "text";
   // | 'secondary'
 }
 
@@ -15,10 +19,10 @@ const styles = tv({
   base: "",
   variants: {
     variant: {
-      primary: "bg-brand-500 px-4 py-2.5 rounded-full text-neutral-50 font-semibold",
-      link: ""
-      // secondary:
-      //   "text-gray-700 dark:text-zinc-300 underline decoration-gray-700/50 hover:decoration-gray-700 dark:decoration-zinc-300/70 dark:hover:decoration-zinc-300",
+      primary:
+        "bg-brand-500 px-4 py-2.5 rounded-full text-neutral-50 font-semibold",
+      link: "",
+      text: "bg-brand-500/10 text-brand-500 rounded-full px-4 py-2.5 font-semibold",
     },
   },
   defaultVariants: {
@@ -27,5 +31,12 @@ const styles = tv({
 });
 
 export function Link(props: LinkProps) {
-  return <AriaLink {...props} className={composeRenderProps(props.className, (className, renderProps) =>  styles({...renderProps, className, variant: props.variant}))} />;
+  return (
+    <AriaLink
+      {...props}
+      className={composeRenderProps(props.className, (className, renderProps) =>
+        styles({ ...renderProps, className, variant: props.variant })
+      )}
+    />
+  );
 }
