@@ -1,4 +1,4 @@
-import Banner from "~/components/hero-2";
+import Banner from "~/components/hero";
 import Trending from "~/components/trending";
 
 export default function PostIndex() {

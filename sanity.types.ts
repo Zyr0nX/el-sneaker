@@ -449,7 +449,7 @@ export type HeaderQueryResult = {
     text: string;
   }> | null;
 } | null;
-// Source: ./src/components/hero-2.tsx
+// Source: ./src/components/hero.tsx
 // Variable: bannerQuery
 // Query: *[_type == "banner"][0]{    images[]{_key, 'ref':asset._ref}    }
 export type BannerQueryResult = {

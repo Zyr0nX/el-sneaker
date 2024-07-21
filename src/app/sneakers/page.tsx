@@ -9,15 +9,28 @@ import {
   AccordionTrigger,
 } from "~/ui/accordion";
 import { client } from "~/utils/sanity/client";
+import { SneakerListQueryResult } from "../../../sanity.types";
 
 export default async function PostIndex({ params, searchParams }: { params: { slug: string }, searchParams: any }) {
   console.log(params.slug);
-  const sneakerListQuery = groq`*[_type == "sneaker"][0...12]`;
+  const sneakerListQuery = groq`*[_type == "sneaker" 
+    && (!defined($brands) || brand->slug.current in $brands)
+    && (!defined($collections) || collection->slug.current in $collections)
+    && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
+    && (!defined($from) || price >= $from)
+    && (!defined($to) || price <= $to)
+    ][0...12]`;
 
-  const sneakerList = await client.fetch(sneakerListQuery, {
-  }, {
-    next: { tags: ["sneaker", params.slug] },
-  });
+  const sneakerList = await client.fetch<SneakerListQueryResult>(
+    sneakerListQuery,
+    {
+      brands: searchParams.brand,
+      $sizes: searchParams.size,
+    },
+    {
+      next: { tags: ["sneaker", params.slug] },
+    }
+  );
   return (
     <div className="py-11 px-[6.25rem] flex flex-col gap-8">
       <h2>Danh muc san pham</h2>
@@ -39,7 +52,7 @@ export default async function PostIndex({ params, searchParams }: { params: { sl
           <AccordionItem value="item-3">
             <AccordionTrigger>Is it animated?</AccordionTrigger>
             <AccordionContent>
-              Yes. It's animated by default, but you can disable it if you
+              Yes. Its animated by default, but you can disable it if you
               prefer.
             </AccordionContent>
           </AccordionItem>
