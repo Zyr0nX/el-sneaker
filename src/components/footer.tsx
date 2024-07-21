@@ -48,7 +48,7 @@ export default async function Footer() {
             <End />
           </Link>
         </div>
-        <div className="pt-10 basis-2/5 border-y border-l border-neutral-300 pl-10 flex flex-col gap-4">
+        <div className="pt-10 pb-6 basis-2/5 border-y border-l border-neutral-300 pl-10 flex flex-col gap-4">
           <div>
             <div className="font-gilroy font-bold text-[2.5rem]">
               {footerContent.logo && (

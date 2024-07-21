@@ -281,7 +281,11 @@ export type Collection = {
 };
 
 export type Brand = {
+  _id: string;
   _type: "brand";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
   name?: string;
   slug?: Slug;
 };
@@ -445,13 +449,39 @@ export type HeaderQueryResult = {
     text: string;
   }> | null;
 } | null;
-// Source: ./src/components/hero.tsx
+// Source: ./src/components/hero-2.tsx
 // Variable: bannerQuery
 // Query: *[_type == "banner"][0]{    images[]{_key, 'ref':asset._ref}    }
 export type BannerQueryResult = {
   images: Array<{
     _key: string;
     ref: string | null;
+  }> | null;
+} | null;
+// Source: ./src/components/product-detail.tsx
+// Variable: sneakerQuery
+// Query: *[_type == "sneaker" && slug.current == 'nb9060-quartz-grey'][0]{    name,    brand->{name},    collection->{name},    price,    description,    images  }
+export type SneakerQueryResult = {
+  name: string | null;
+  brand: {
+    name: string | null;
+  } | null;
+  collection: {
+    name: string | null;
+  } | null;
+  price: number | null;
+  description: null;
+  images: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
   }> | null;
 } | null;
 // Source: ./src/components/trending.tsx
@@ -467,9 +497,70 @@ export type TrendingQueryResult = {
     slug: {
       current: string;
     } | null;
-    brand: null;
+    brand: {
+      name: string | null;
+    } | null;
     image: {
       ref: string | null;
     } | null;
   }> | null;
 } | null;
+// Source: ./src/app/sneakers/page.tsx
+// Variable: sneakerListQuery
+// Query: *[_type == "sneaker"][0...12]
+export type SneakerListQueryResult = Array<{
+  _id: string;
+  _type: "sneaker";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  images?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
+  sizes?: Array<{
+    _key: string;
+  } & Size>;
+  sku?: string;
+  price?: number;
+  content?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  brand?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "brand";
+  };
+  collection?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "collection";
+  };
+}>;

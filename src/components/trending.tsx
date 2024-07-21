@@ -4,7 +4,6 @@ import { client } from "~/utils/sanity/client";
 import { TrendingQueryResult } from "../../sanity.types";
 import End from "~/icons/end";
 import { Link } from "~/ui/link";
-import { Image } from "~/utils/sanity/image";
 import ProductCard from "./product-card";
 
 export default async function Trending() {
@@ -29,7 +28,7 @@ export default async function Trending() {
   console.log(trendingContent);
   if (!trendingContent) return null;
   return (
-    <main className="py-11 px-[6.26rem] flex flex-col gap-8">
+    <div className="py-11 px-[6.26rem] flex flex-col gap-8">
       <div className="flex justify-between items-center">
         <h2 className="font-bold text-[2.5rem]">{trendingContent.title}</h2>
         {trendingContent.viewAllLink && (
@@ -83,6 +82,6 @@ export default async function Trending() {
           ))}
         </div>
       )}
-    </main>
+    </div>
   );
 }

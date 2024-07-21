@@ -1,15 +1,11 @@
-import Footer from "~/components/footer";
-import Header from "~/components/header";
-import Banner from "~/components/hero";
+import Banner from "~/components/hero-2";
 import Trending from "~/components/trending";
 
 export default function PostIndex() {
   return (
     <>
-      <Header />
       <Banner />
       <Trending />
-      <Footer />
     </>
   );
 }
