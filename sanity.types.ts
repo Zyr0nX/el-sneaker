@@ -388,6 +388,24 @@ export type HslaColor = {
 
 export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Footer | Social | Header | RichText | Banner | Trending | Link | Size | Sneaker | Collection | Brand | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Slug | Color | RgbaColor | HsvaColor | HslaColor;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./src/components/filter-provider.tsx
+// Variable: filterQuery
+// Query: {    "brands": *[_type == "brand" && _id in array::unique(*[_type == "sneaker"].brand._ref)]{        _id,        name,        "slug": slug.current    },    "collections": *[_type == "collection" && _id in array::unique(*[_type == "sneaker"].collection._ref)]{        _id,        name,        "slug": slug.current    },    "sizes": array::unique(*[_type == "sneaker" && defined(sizes[out_of_stock != true].size)].sizes[out_of_stock != true].size),    "minPrice": math::min(*[_type == "sneaker" && defined(price)].price),    "maxPrice": math::max(*[_type == "sneaker" && defined(price)].price)  }
+export type FilterQueryResult = {
+  brands: Array<{
+    _id: string;
+    name: string | null;
+    slug: string | null;
+  }>;
+  collections: Array<{
+    _id: string;
+    name: string | null;
+    slug: string | null;
+  }>;
+  sizes: Array<number | null>;
+  minPrice: number | null;
+  maxPrice: number | null;
+};
 // Source: ./src/components/footer.tsx
 // Variable: footerQuery
 // Query: *[_type == "footer"][0]{    title,    logo,    additionalInformation,    'socialPlatformIcon': socialPlatformIcon[]->{      socialPlatform,      link    },    'socialPlatform': socialPlatform[]->{      title,      link    },    button{      text    },    links[]{_key, url, text}    }
@@ -484,9 +502,21 @@ export type SneakerQueryResult = {
     _key: string;
   }> | null;
 } | null;
+// Source: ./src/components/product-list.tsx
+// Variable: sneakerListQuery
+// Query: *[_type == "sneaker"     && (!defined($brands) || brand->slug.current in $brands)    && (!defined($collections) || collection->slug.current in $collections)    && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)    && (!defined($from) || price >= $from)    && (!defined($to) || price <= $to)    ][0...12]{      _id,      "slug": slug.current,      name,      price,      "brand": brand->name,      "collection": collection->name,      "image": images[0].asset._ref    }
+export type SneakerListQueryResult = Array<{
+  _id: string;
+  slug: string | null;
+  name: string | null;
+  price: number | null;
+  brand: string | null;
+  collection: string | null;
+  image: string | null;
+}>;
 // Source: ./src/components/trending.tsx
 // Variable: trendingQuery
-// Query: *[_type == "trending"][0]{    title,    viewAllLink,    'sneakers': sneakers[]->{      _id,      name,      price,      slug{current},      brand->{name},      "image":images[0]{'ref':asset._ref},    }}
+// Query: *[_type == "trending"][0]{    title,    viewAllLink,    'sneakers': sneakers[]->{      _id,      name,      price,      "slug":slug.current,      "brand":brand->name,      "image":images[0].asset._ref,    }}
 export type TrendingQueryResult = {
   title: string | null;
   viewAllLink: Link | null;
@@ -494,73 +524,8 @@ export type TrendingQueryResult = {
     _id: string;
     name: string | null;
     price: number | null;
-    slug: {
-      current: string;
-    } | null;
-    brand: {
-      name: string | null;
-    } | null;
-    image: {
-      ref: string | null;
-    } | null;
+    slug: string | null;
+    brand: string | null;
+    image: string | null;
   }> | null;
 } | null;
-// Source: ./src/app/sneakers/page.tsx
-// Variable: sneakerListQuery
-// Query: *[_type == "sneaker"][0...12]
-export type SneakerListQueryResult = Array<{
-  _id: string;
-  _type: "sneaker";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  images?: Array<{
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-    _key: string;
-  }>;
-  sizes?: Array<{
-    _key: string;
-  } & Size>;
-  sku?: string;
-  price?: number;
-  content?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
-  brand?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "brand";
-  };
-  collection?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "collection";
-  };
-}>;

@@ -14,9 +14,9 @@ export default async function Trending() {
       _id,
       name,
       price,
-      slug{current},
-      brand->{name},
-      "image":images[0]{'ref':asset._ref},
+      "slug":slug.current,
+      "brand":brand->name,
+      "image":images[0].asset._ref,
     }}`;
   const trendingContent = await client.fetch<TrendingQueryResult>(
     trendingQuery,
@@ -45,40 +45,14 @@ export default async function Trending() {
       {trendingContent.sneakers && (
         <div className="grid grid-cols-4 gap-6">
           {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
-          ))}
-          {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
-          ))}
-          {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
-          ))}
-          {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
-          ))}
-          {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
-          ))}
-          {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
-          ))}
-          {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
-          ))}
-          {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
-          ))}
-          {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
-          ))}
-          {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
-          ))}
-          {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
-          ))}
-          {trendingContent.sneakers.map((sneaker) => (
-            <ProductCard key={sneaker._id} sneaker={sneaker} />
+            <ProductCard
+              key={sneaker._id}
+              brand={sneaker.brand}
+              name={sneaker.name}
+              price={sneaker.price}
+              image={sneaker.image}
+              slug={sneaker.slug}
+            />
           ))}
         </div>
       )}
