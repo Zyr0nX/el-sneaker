@@ -1,66 +1,70 @@
+"use client";
+
 import React from "react";
-import { SneakerListQueryResult } from "../../sanity.types";
 import ProductCard from "./product-card";
-import { groq } from "next-sanity";
-import { client } from "~/utils/sanity/client";
+import { getCookies, setCookie, deleteCookie, getCookie } from "cookies-next";
+import { useSearchParams } from "next/navigation";
 
-export default async function ProductList({
-  searchParams
+export default function ProductList({
+  products,
 }: {
-  searchParams: {
-    brands?: string;
-    sizes?: string;
-    from?: string;
-    to?: string;
-    collections?: string;
-  };
+  products: {
+    _id: string;
+    slug: string | null;
+    name: string | null;
+    price: number | null;
+    brand: string | null;
+    image: string | null;
+  }[];
 }) {
-  const sneakerListQuery = groq`*[_type == "sneaker" 
-    && (!defined($brands) || brand->slug.current in $brands)
-    && (!defined($collections) || collection->slug.current in $collections)
-    && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
-    && (!defined($from) || price >= $from)
-    && (!defined($to) || price <= $to)
-    ][0...12]{
-      _id,
-      "slug": slug.current,
-      name,
-      price,
-      "brand": brand->name,
-      "collection": collection->name,
-      "image": images[0].asset._ref
-    }`;
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page");
+  const sort = searchParams.get("sort");
 
-  const sneakerList = await client.fetch<SneakerListQueryResult>(
-    sneakerListQuery,
-    {
-      brands: searchParams.brands ? searchParams.brands.split(",") : null,
-      sizes: searchParams.sizes
-        ? searchParams.sizes
-            .split(",")
-            .filter((item) => !isNaN(Number(item)))
-            .map((item) => Number(item))
-        : null,
-      collections: searchParams.collections
-        ? searchParams.collections.split(",")
-        : null,
-      from: searchParams.from || null,
-      to: searchParams.to || null,
-    },
-    {
-      next: { tags: ["sneaker"] },
+  function updateCookies(sort: string, page: string, products: any) {
+    if (products.length === 0) return;
+    console.log(!products)
+    const lastProductId = products[products.length - 1]._id;
+    
+    const lastProductPrice = products[products.length - 1].price
+
+    const cookieName = sort === "asc" ? "lastAscs" : "lastDescs";
+    const lastIdsCookieName = sort === "asc" ? "lastIdsAsc" : "lastIdsDesc";
+
+    const lastCookie = getCookie(cookieName);
+    const lastIdsCookie = getCookie(lastIdsCookieName);
+
+    let lastData = lastCookie ? JSON.parse(lastCookie) : {};
+    let lastIdsData = lastIdsCookie ? JSON.parse(lastIdsCookie) : {};
+
+    if (typeof lastData !== "object" || lastData === null) {
+      lastData = {};
     }
-  );
+    if (typeof lastIdsData !== "object" || lastIdsData === null) {
+      lastIdsData = {};
+    }
+
+    lastData[page || 1] = lastProductPrice;
+    lastIdsData[page || 1] = lastProductId;
+
+    setCookie(cookieName, lastData);
+    setCookie(lastIdsCookieName, lastIdsData);
+  }
+
+  if (sort === "asc" || sort === "desc") {
+    updateCookies(sort, page, products);
+  }
+
   return (
-    <div className="grid grid-cols-3">
-      {sneakerList.map((sneaker) => (
+    <div className="grid grid-cols-3 gap-6">
+      {products.map((product) => (
         <ProductCard
-          key={sneaker._id}
-          slug={sneaker.slug}
-          brand={sneaker.brand}
-          image={sneaker.image}
-          name={sneaker.name}
-          price={sneaker.price}
+          key={product._id}
+          slug={product.slug}
+          brand={product.brand}
+          image={product.image}
+          name={product.name}
+          price={product.price}
         />
       ))}
     </div>

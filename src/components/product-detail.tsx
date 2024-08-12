@@ -25,7 +25,6 @@ export default async function ProductDetail({
       next: { tags: ["sneaker", sneakerSlug] },
     }
   );
-  console.log(sneakerContent);
   if (!sneakerContent || !sneakerContent.images) return null;
   return (
     <div className="px-[6.25rem] py-11 flex gap-[4.5rem] w-full ">

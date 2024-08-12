@@ -29,7 +29,5 @@ export default async function FilterProvider() {
     }
   );
 
-  console.log(filterList)
-
-  return <Filter data={filterList} />;
+  return <Filter filter={filterList} />;
 }

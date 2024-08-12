@@ -25,7 +25,6 @@ export default async function Trending() {
       next: { tags: ["trending"] },
     }
   );
-  console.log(trendingContent);
   if (!trendingContent) return null;
   return (
     <div className="py-11 px-[6.26rem] flex flex-col gap-8">

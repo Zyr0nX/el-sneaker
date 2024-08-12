@@ -27,71 +27,84 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Input } from "~/ui/input";
 import { Separator } from "~/ui/separator";
+import { RadioGroup, RadioGroupItem } from "~/ui/radio-group";
+import { Label } from "~/ui/label";
 
 const FormSchema = z.object({
   brands: z.array(z.string()),
   collections: z.array(z.string()),
   sizes: z.array(z.number()),
-  minPrice: z.string(),
-  maxPrice: z.string(),
+  minPrice: z.number().nullable(),
+  maxPrice: z.number().nullable(),
 });
 
-export default function Filter({ data }: { data: FilterQueryResult }) {
+export default function Filter({ filter }: { filter: FilterQueryResult }) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      brands: [],
-      collections: [],
-      sizes: [],
-      minPrice: "",
-      maxPrice: "",
+      brands: searchParams.get("brands")?.split(",") || [],
+      collections: searchParams.get("collections")?.split(",") || [],
+      sizes: searchParams.get("sizes")?.split(",")?.map((size) => Number(size)) || [],
+      minPrice: searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : null,
+      maxPrice: searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null,
     },
   });
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams();
+  function createQueryString(
+    params: URLSearchParams,
+    name: string,
+    value: string | null
+  ) {
+    if (value) {
       params.set(name, value);
-
-      return params.toString();
-    },
-    []
-  );
+    } else {
+      params.delete(name);
+    }
+    return params;
+  }
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const queryParts = [];
-    let hasQuery = false;
+    const params = new URLSearchParams(searchParams.toString());
+
     if (data.brands.length > 0) {
-      hasQuery = true;
-      queryParts.push(createQueryString("brands", data.brands.join(",")));
+      createQueryString(params, "brands", data.brands.join(","));
+    } else {
+      params.delete("brands");
     }
+
     if (data.collections.length > 0) {
-      queryParts.push(createQueryString("collections", data.collections.join(",")));
+      createQueryString(params, "collections", data.collections.join(","));
+    } else {
+      params.delete("collections");
     }
+
     if (data.sizes.length > 0) {
-      hasQuery = true;
-      queryParts.push(createQueryString("sizes", data.sizes.join(",")));
-    }
-    if (data.minPrice) {
-      hasQuery = true;
-      queryParts.push(createQueryString("minPrice", data.minPrice));
-    }
-    if (data.maxPrice) {
-      hasQuery = true;
-      queryParts.push(createQueryString("maxPrice", data.maxPrice));
+      createQueryString(params, "sizes", data.sizes.join(","));
+    } else {
+      params.delete("sizes");
     }
 
-    console.log(queryParts)
+    if (data.minPrice !== null) {
+      createQueryString(params, "minPrice", data.minPrice.toString());
+    } else {
+      params.delete("minPrice");
+    }
 
-    if (!hasQuery) {
+    if (data.maxPrice !== null) {
+      createQueryString(params, "maxPrice", data.maxPrice.toString());
+    } else {
+      params.delete("maxPrice");
+    }
+
+    if (params.toString()) {
+      router.replace(pathname + "?" + params.toString());
+    } else {
       router.replace(pathname);
-      return;
     }
-
-    router.replace(pathname + "?" + queryParts.join("&"));
   }
 
   function generatePriceSegments(
@@ -115,7 +128,10 @@ export default function Filter({ data }: { data: FilterQueryResult }) {
     return segments;
   }
 
-  const segments = generatePriceSegments(data.minPrice ?? 0, data.maxPrice ?? 0)
+  const segments = generatePriceSegments(
+    filter.minPrice ?? 0,
+    filter.maxPrice ?? 0
+  );
 
   return (
     <Form {...form}>
@@ -127,7 +143,7 @@ export default function Filter({ data }: { data: FilterQueryResult }) {
                 Thương hiệu
               </AccordionTrigger>
               <AccordionContent>
-                {data.brands
+                {filter.brands
                   .filter((brand) => brand.slug !== null)
                   .map((brand) => (
                     <FormField
@@ -175,7 +191,7 @@ export default function Filter({ data }: { data: FilterQueryResult }) {
                 Nhóm hàng
               </AccordionTrigger>
               <AccordionContent>
-                {data.collections.map((collection) => (
+                {filter.collections.map((collection) => (
                   <FormField
                     key={collection._id}
                     control={form.control}
@@ -221,7 +237,7 @@ export default function Filter({ data }: { data: FilterQueryResult }) {
                 Kích thước
               </AccordionTrigger>
               <AccordionContent>
-                {data.sizes.map((size) => (
+                {filter.sizes.map((size) => (
                   <FormField
                     key={size}
                     control={form.control}
@@ -261,24 +277,130 @@ export default function Filter({ data }: { data: FilterQueryResult }) {
               <AccordionTrigger className="text-lg uppercase font-medium">
                 Giá
               </AccordionTrigger>
-              <AccordionContent>
-                <FormField
-                  control={form.control}
-                  name="minPrice"
-                  render={({ field }) => {
-                    return (
-                      <FormItem className="flex space-x-3 py-1 w-full text-sm">
-                        <FormControl>
-                          <div className="h-12 border-neutral-100">
-                            <Input />
-                            <Separator />
-                            <p>đ</p>
-                          </div>
-                        </FormControl>
-                      </FormItem>
-                    );
-                  }}
-                />
+              <AccordionContent className="flex flex-col gap-3">
+                <div className="flex gap-3">
+                  <FormField
+                    control={form.control}
+                    name="minPrice"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormControl>
+                            <div className="h-12 border-neutral-100 flex border rounded-lg items-center gap-2 overflow-hidden px-3">
+                              <Input
+                                className="h-full"
+                                placeholder="Từ"
+                                value={
+                                  field.value?.toLocaleString("vi-VN") || ""
+                                }
+                                onChange={(event) => {
+                                  const inputValue = event.target.value.replace(
+                                    /\D/g,
+                                    ""
+                                  );
+                                  const numericValue = inputValue
+                                    ? Number(inputValue)
+                                    : null;
+
+                                  field.onChange(numericValue);
+                                }}
+                                onKeyDown={(event) => {
+                                  const allowedKeys = [
+                                    "Backspace",
+                                    "ArrowLeft",
+                                    "ArrowRight",
+                                    "Tab",
+                                    "Delete",
+                                  ];
+                                  if (allowedKeys.includes(event.key)) {
+                                    return;
+                                  }
+
+                                  if (!/[0-9]/.test(event.key)) {
+                                    event.preventDefault();
+                                  }
+                                }}
+                              />
+                              <Separator
+                                orientation="vertical"
+                                className="h-5"
+                              />
+                              <p>đ</p>
+                            </div>
+                          </FormControl>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="maxPrice"
+                    render={({ field }) => {
+                      return (
+                        <FormItem>
+                          <FormControl>
+                            <div className="h-12 border-neutral-100 flex border rounded-lg items-center gap-2 overflow-hidden px-3">
+                              <Input
+                                className="h-full"
+                                placeholder="Đến"
+                                value={
+                                  field.value?.toLocaleString("vi-VN") || ""
+                                }
+                                onChange={(event) => {
+                                  const inputValue = event.target.value.replace(
+                                    /\D/g,
+                                    ""
+                                  );
+                                  const numericValue = inputValue
+                                    ? Number(inputValue)
+                                    : null;
+
+                                  field.onChange(numericValue);
+                                }}
+                                onKeyDown={(event) => {
+                                  const allowedKeys = [
+                                    "Backspace",
+                                    "ArrowLeft",
+                                    "ArrowRight",
+                                    "Tab",
+                                    "Delete",
+                                  ];
+                                  if (allowedKeys.includes(event.key)) {
+                                    return;
+                                  }
+
+                                  if (!/[0-9]/.test(event.key)) {
+                                    event.preventDefault();
+                                  }
+                                }}
+                              />
+                              <Separator
+                                orientation="vertical"
+                                className="h-5"
+                              />
+                              <p>đ</p>
+                            </div>
+                          </FormControl>
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </div>
+
+                <RadioGroup>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="default" id="r1" />
+                    <Label htmlFor="r1">Dưới 1.000.000 VNĐ</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="comfortable" id="r2" />
+                    <Label htmlFor="r2">1.000.000 - 3.000.000 VNĐ</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="compact" id="r3" />
+                    <Label htmlFor="r3">Từ 3.000.000 VNĐ</Label>
+                  </div>
+                </RadioGroup>
               </AccordionContent>
             </FormItem>
           </AccordionItem>

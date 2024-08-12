@@ -8,7 +8,7 @@ import useEmblaCarousel, {
 import { EmblaCarouselType } from "embla-carousel";
 
 import { cn } from "~/utils/shadcn";
-import { Button } from "~/ui/button-2";
+import { Button } from "~/ui/button";
 import Autoplay from "~/components/Autoplay";
 import { Image } from "~/utils/sanity/image";
 
@@ -221,7 +221,7 @@ CarouselItem.displayName = "CarouselItem";
 const CarouselPrevious = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
->(({ className, variant = "outline", size = "icon", ...props }, ref) => {
+>(({ className, variant = "secondary", size = "icon", ...props }, ref) => {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
   return (
@@ -250,7 +250,7 @@ CarouselPrevious.displayName = "CarouselPrevious";
 const CarouselNext = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<typeof Button>
->(({ className, variant = "outline", size = "icon", ...props }, ref) => {
+>(({ className, variant = "secondary", size = "icon", ...props }, ref) => {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
 
   return (

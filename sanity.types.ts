@@ -476,6 +476,10 @@ export type BannerQueryResult = {
     ref: string | null;
   }> | null;
 } | null;
+// Source: ./src/components/product-count.tsx
+// Variable: productCountQuery
+// Query: count(*[_type == "sneaker"       && (!defined($brands) || brand->slug.current in $brands)      && (!defined($collections) || collection->slug.current in $collections)      && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)      && (!defined($from) || price >= $from)      && (!defined($to) || price <= $to)    ])
+export type ProductCountQueryResult = number;
 // Source: ./src/components/product-detail.tsx
 // Variable: sneakerQuery
 // Query: *[_type == "sneaker" && slug.current == 'nb9060-quartz-grey'][0]{    name,    brand->{name},    collection->{name},    price,    description,    images  }

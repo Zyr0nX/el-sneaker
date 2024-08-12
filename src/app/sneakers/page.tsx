@@ -1,14 +1,9 @@
-import { groq } from "next-sanity";
-import ProductCard from "~/components/product-card";
-import ProductDetail from "~/components/product-detail";
-import Test from "~/components/test";
-
-import { client } from "~/utils/sanity/client";
-import { SneakerListQueryResult } from "../../../sanity.types";
-import Filter from "~/components/filter";
 import FilterProvider from "~/components/filter-provider";
-import ProductList from "~/components/product-list";
 import { Suspense } from "react";
+import ProductCount from "~/components/product-count";
+import { Sort } from "~/components/sort";
+import ProductPaginationProvider from "~/components/product-pagination-provider";
+import ProductListProvider from "~/components/product-list-provider";
 
 export default async function PostIndex({
   searchParams,
@@ -19,6 +14,8 @@ export default async function PostIndex({
     from?: string;
     to?: string;
     collections?: string;
+    sort?: string;
+    page?: string;
   };
 }) {
   return (
@@ -28,9 +25,69 @@ export default async function PostIndex({
         <div className="w-72 shrink-0">
           <FilterProvider />
         </div>
-        <Suspense key={JSON.stringify(searchParams)} fallback={<div>Loading...</div>}>
-          <ProductList searchParams={searchParams} />
-        </Suspense>
+        <div className="flex flex-col gap-3">
+          <div className="flex justify-between items-center">
+            <Suspense
+              key={JSON.stringify({
+                brands: searchParams.brands,
+                sizes: searchParams.sizes,
+                collections: searchParams.collections,
+                from: searchParams.from,
+                to: searchParams.to,
+              })}
+              fallback={<div>Loading...</div>}
+            >
+              <ProductCount
+                brands={searchParams.brands}
+                sizes={searchParams.sizes}
+                collections={searchParams.collections}
+                from={searchParams.from}
+                to={searchParams.to}
+              />
+            </Suspense>
+            <Sort />
+          </div>
+          <Suspense
+            key={JSON.stringify({
+              brands: searchParams.brands,
+              sizes: searchParams.sizes,
+              collections: searchParams.collections,
+              from: searchParams.from,
+              to: searchParams.to,
+              sort: searchParams.sort,
+              page: searchParams.page,
+            })}
+            fallback={<div>Loading...</div>}
+          >
+            <ProductListProvider
+              brands={searchParams.brands}
+              sizes={searchParams.sizes}
+              collections={searchParams.collections}
+              from={searchParams.from}
+              to={searchParams.to}
+              sort={searchParams.sort}
+              page={searchParams.page}
+            />
+          </Suspense>
+          <Suspense
+            key={JSON.stringify({
+              brands: searchParams.brands,
+              sizes: searchParams.sizes,
+              collections: searchParams.collections,
+              from: searchParams.from,
+              to: searchParams.to,
+            })}
+            fallback={<div>Loading...</div>}
+          >
+            <ProductPaginationProvider
+              brands={searchParams.brands}
+              sizes={searchParams.sizes}
+              collections={searchParams.collections}
+              from={searchParams.from}
+              to={searchParams.to}
+            />
+          </Suspense>
+        </div>
       </div>
     </div>
   );
