@@ -21,39 +21,39 @@ export default function ProductList({
   const page = searchParams.get("page");
   const sort = searchParams.get("sort");
 
-  function updateCookies(sort: string, page: string, products: any) {
-    if (products.length === 0) return;
-    console.log(!products)
-    const lastProductId = products[products.length - 1]._id;
+  // function updateCookies(sort: string, page: string, products: any) {
+  //   if (products.length === 0) return;
+  //   console.log(!products)
+  //   const lastProductId = products[products.length - 1]._id;
     
-    const lastProductPrice = products[products.length - 1].price
+  //   const lastProductPrice = products[products.length - 1].price
 
-    const cookieName = sort === "asc" ? "lastAscs" : "lastDescs";
-    const lastIdsCookieName = sort === "asc" ? "lastIdsAsc" : "lastIdsDesc";
+  //   const cookieName = sort === "asc" ? "lastAscs" : "lastDescs";
+  //   const lastIdsCookieName = sort === "asc" ? "lastIdsAsc" : "lastIdsDesc";
 
-    const lastCookie = getCookie(cookieName);
-    const lastIdsCookie = getCookie(lastIdsCookieName);
+  //   const lastCookie = getCookie(cookieName);
+  //   const lastIdsCookie = getCookie(lastIdsCookieName);
 
-    let lastData = lastCookie ? JSON.parse(lastCookie) : {};
-    let lastIdsData = lastIdsCookie ? JSON.parse(lastIdsCookie) : {};
+  //   let lastData = lastCookie ? JSON.parse(lastCookie) : {};
+  //   let lastIdsData = lastIdsCookie ? JSON.parse(lastIdsCookie) : {};
 
-    if (typeof lastData !== "object" || lastData === null) {
-      lastData = {};
-    }
-    if (typeof lastIdsData !== "object" || lastIdsData === null) {
-      lastIdsData = {};
-    }
+  //   if (typeof lastData !== "object" || lastData === null) {
+  //     lastData = {};
+  //   }
+  //   if (typeof lastIdsData !== "object" || lastIdsData === null) {
+  //     lastIdsData = {};
+  //   }
 
-    lastData[page || 1] = lastProductPrice;
-    lastIdsData[page || 1] = lastProductId;
+  //   lastData[page || 1] = lastProductPrice;
+  //   lastIdsData[page || 1] = lastProductId;
 
-    setCookie(cookieName, lastData);
-    setCookie(lastIdsCookieName, lastIdsData);
-  }
+  //   setCookie(cookieName, lastData);
+  //   setCookie(lastIdsCookieName, lastIdsData);
+  // }
 
-  if (sort === "asc" || sort === "desc") {
-    updateCookies(sort, page, products);
-  }
+  // if (sort === "asc" || sort === "desc") {
+  //   updateCookies(sort, page, products);
+  // }
 
   return (
     <div className="grid grid-cols-3 gap-6">

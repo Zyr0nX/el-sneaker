@@ -18,6 +18,17 @@ export default async function PostIndex({
     page?: string;
   };
 }) {
+  console.log(
+    JSON.stringify({
+      brands: searchParams.brands,
+      sizes: searchParams.sizes,
+      collections: searchParams.collections,
+      from: searchParams.from,
+      to: searchParams.to,
+      sort: searchParams.sort,
+      page: searchParams.page,
+    })
+  );
   return (
     <div className="py-11 px-[6.25rem] flex flex-col gap-8">
       <h2 className="font-bold text-[2.5rem]">Danh mục sản phẩm</h2>
@@ -27,17 +38,15 @@ export default async function PostIndex({
         </div>
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
-            <Suspense
-              key={JSON.stringify({
-                brands: searchParams.brands,
-                sizes: searchParams.sizes,
-                collections: searchParams.collections,
-                from: searchParams.from,
-                to: searchParams.to,
-              })}
-              fallback={<div>Loading...</div>}
-            >
+            <Suspense fallback={<div>Loading...</div>}>
               <ProductCount
+                key={JSON.stringify({
+                  brands: searchParams.brands,
+                  sizes: searchParams.sizes,
+                  collections: searchParams.collections,
+                  from: searchParams.from,
+                  to: searchParams.to,
+                })}
                 brands={searchParams.brands}
                 sizes={searchParams.sizes}
                 collections={searchParams.collections}
@@ -47,19 +56,17 @@ export default async function PostIndex({
             </Suspense>
             <Sort />
           </div>
-          <Suspense
-            key={JSON.stringify({
-              brands: searchParams.brands,
-              sizes: searchParams.sizes,
-              collections: searchParams.collections,
-              from: searchParams.from,
-              to: searchParams.to,
-              sort: searchParams.sort,
-              page: searchParams.page,
-            })}
-            fallback={<div>Loading...</div>}
-          >
+          <Suspense fallback={<div>Loading...</div>}>
             <ProductListProvider
+              key={JSON.stringify({
+                brands: searchParams.brands,
+                sizes: searchParams.sizes,
+                collections: searchParams.collections,
+                from: searchParams.from,
+                to: searchParams.to,
+                sort: searchParams.sort,
+                page: searchParams.page,
+              })}
               brands={searchParams.brands}
               sizes={searchParams.sizes}
               collections={searchParams.collections}
@@ -69,17 +76,15 @@ export default async function PostIndex({
               page={searchParams.page}
             />
           </Suspense>
-          <Suspense
-            key={JSON.stringify({
-              brands: searchParams.brands,
-              sizes: searchParams.sizes,
-              collections: searchParams.collections,
-              from: searchParams.from,
-              to: searchParams.to,
-            })}
-            fallback={<div>Loading...</div>}
-          >
+          <Suspense fallback={<div>Loading...</div>}>
             <ProductPaginationProvider
+              key={JSON.stringify({
+                brands: searchParams.brands,
+                sizes: searchParams.sizes,
+                collections: searchParams.collections,
+                from: searchParams.from,
+                to: searchParams.to,
+              })}
               brands={searchParams.brands}
               sizes={searchParams.sizes}
               collections={searchParams.collections}
