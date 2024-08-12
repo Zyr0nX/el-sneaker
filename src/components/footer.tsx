@@ -1,5 +1,5 @@
 import React from "react";
-import { client } from "~/utils/sanity/client";
+import { client } from "~/sanity/lib/client";
 import { groq, PortableText } from "next-sanity";
 import { FooterQueryResult } from "../../sanity.types";
 import { components } from "~/utils/portabletext/components";

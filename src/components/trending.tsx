@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 import React from "react";
-import { client } from "~/utils/sanity/client";
+import { client } from "~/sanity/lib/client";
 import { TrendingQueryResult } from "../../sanity.types";
 import End from "~/icons/end";
 import { Link } from "~/ui/link";

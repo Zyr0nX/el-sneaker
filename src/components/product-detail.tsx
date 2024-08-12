@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 import React from "react";
-import { client } from "~/utils/sanity/client";
+import { client } from "~/sanity/lib/client";
 import { SneakerQueryResult } from "../../sanity.types";
 import { Image } from "~/utils/sanity/image";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, Thumbs } from "~/ui/carousel-2";

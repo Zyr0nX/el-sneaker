@@ -8,7 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "~/ui/pagination";
-import { client } from "~/utils/sanity/client";
+import { client } from "~/sanity/lib/client";
 import { ProductCountQueryResult } from "../../sanity.types";
 import { cookies } from "next/headers";
 import ProductPagination from "./product-pagination";

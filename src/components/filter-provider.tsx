@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 import React from "react";
-import { client } from "~/utils/sanity/client";
+import { client } from "~/sanity/lib/client";
 import { FilterQueryResult } from "../../sanity.types";
 import Filter from "./filter";
 

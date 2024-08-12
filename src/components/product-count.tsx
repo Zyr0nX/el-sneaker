@@ -1,6 +1,6 @@
 import { groq } from 'next-sanity';
 import React from 'react'
-import { client } from '~/utils/sanity/client';
+import { client } from '~/sanity/lib/client';
 import { ProductCountQueryResult } from '../../sanity.types';
 
 export default async function ProductCount({ brands, sizes, collections, from, to }: {

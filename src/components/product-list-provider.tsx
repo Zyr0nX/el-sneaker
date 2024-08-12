@@ -1,6 +1,6 @@
 import { groq } from "next-sanity";
 import React from "react";
-import { client } from "~/utils/sanity/client";
+import { client } from "~/sanity/lib/client";
 import { SneakerListQueryResult } from "../../sanity.types";
 import ProductList from "./product-list";
 import { cookies } from "next/headers";
