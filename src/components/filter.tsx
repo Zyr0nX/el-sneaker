@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { FilterQueryResult } from "../../sanity.types";
 import {
   Accordion,
@@ -13,7 +13,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Button } from "~/ui/button";
 import { Checkbox } from "~/ui/checkbox";
 import {
   Form,
@@ -29,6 +28,7 @@ import { Input } from "~/ui/input";
 import { Separator } from "~/ui/separator";
 import { RadioGroup, RadioGroupItem } from "~/ui/radio-group";
 import { Label } from "~/ui/label";
+import { Button } from "~/ui/button";
 
 const FormSchema = z.object({
   brands: z.array(z.string()),
@@ -53,6 +53,26 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
       maxPrice: searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null,
     },
   });
+
+  const [radioValue, setRadioValue] = React.useState<string>();
+
+  const minPrice = form.watch("minPrice");
+  const maxPrice = form.watch("maxPrice");
+
+  useEffect(() => {
+    if (maxPrice === 1000000 && !minPrice) {
+      setRadioValue("below-1000000");
+    }
+    else if (minPrice === 1000000 && maxPrice === 3000000) {
+      setRadioValue("1000000-3000000");
+    }
+    else if (minPrice === 3000000 && !maxPrice) {
+      setRadioValue("above-3000000");
+    }
+    else {
+      setRadioValue("");
+    }
+  }, [minPrice, maxPrice]);
 
   function createQueryString(
     params: URLSearchParams,
@@ -107,31 +127,6 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
     }
   }
 
-  function generatePriceSegments(
-    minPrice: number,
-    maxPrice: number
-  ): [number, number][] {
-    const segments: [number, number][] = [];
-    const step = 2000;
-
-    let current = Math.floor(minPrice / step) * step;
-    while (current < maxPrice) {
-      let next = current + step;
-      if (next >= maxPrice) {
-        segments.push([current, Infinity]);
-        break;
-      }
-      segments.push([current, next]);
-      current = next;
-    }
-
-    return segments;
-  }
-
-  const segments = generatePriceSegments(
-    filter.minPrice ?? 0,
-    filter.maxPrice ?? 0
-  );
 
   return (
     <Form {...form}>
@@ -152,7 +147,7 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
                       name="brands"
                       render={({ field }) => {
                         return (
-                          <FormItem className="flex space-x-3 py-1 w-full text-sm">
+                          <FormItem className="flex gap-3 py-1.5 w-full text-sm">
                             <FormControl>
                               <Checkbox
                                 checked={
@@ -198,7 +193,7 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
                     name="collections"
                     render={({ field }) => {
                       return (
-                        <FormItem className="flex space-x-3 py-1 w-full text-sm">
+                        <FormItem className="flex gap-3 py-1.5 w-full text-sm">
                           <FormControl>
                             <Checkbox
                               checked={
@@ -244,7 +239,7 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
                     name="sizes"
                     render={({ field }) => {
                       return (
-                        <FormItem className="flex space-x-3 py-1 w-full text-sm">
+                        <FormItem className="flex gap-3 py-1.5 w-full text-sm">
                           <FormControl>
                             <Checkbox
                               checked={
@@ -320,6 +315,16 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
                                     event.preventDefault();
                                   }
                                 }}
+                                onBlur={() => {
+                                  const maxPrice = form.getValues("maxPrice");
+                                  if (
+                                    maxPrice &&
+                                    field.value &&
+                                    field.value > maxPrice
+                                  ) {
+                                    field.onChange(maxPrice);
+                                  }
+                                }}
                               />
                               <Separator
                                 orientation="vertical"
@@ -373,6 +378,16 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
                                     event.preventDefault();
                                   }
                                 }}
+                                onBlur={() => {
+                                  const minPrice = form.getValues("minPrice");
+                                  if (
+                                    minPrice &&
+                                    field.value &&
+                                    field.value < minPrice
+                                  ) {
+                                    field.onChange(minPrice);
+                                  }
+                                }}
                               />
                               <Separator
                                 orientation="vertical"
@@ -387,54 +402,64 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
                   />
                 </div>
 
-                <RadioGroup>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="default" id="r1" />
+                <RadioGroup
+                  className="flex flex-col gap-4"
+                  value={radioValue}
+                  onValueChange={(value) => {
+                    setRadioValue(value);
+                    if (value === "below-1000000") {
+                      form.resetField("minPrice");
+                      form.setValue("maxPrice", 1000000);
+                    }
+
+                    if (value === "1000000-3000000") {
+                      form.setValue("minPrice", 1000000);
+                      form.setValue("maxPrice", 3000000);
+                    }
+
+                    if (value === "above-3000000") {
+                      form.setValue("minPrice", 3000000);
+                      form.resetField("maxPrice");
+                    }
+                  }}
+                >
+                  <div className="flex items-center gap-4">
+                    <RadioGroupItem value="below-1000000" id="r1" />
                     <Label htmlFor="r1">Dưới 1.000.000 VNĐ</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="comfortable" id="r2" />
+                  <div className="flex items-center gap-4">
+                    <RadioGroupItem value="1000000-3000000" id="r2" />
                     <Label htmlFor="r2">1.000.000 - 3.000.000 VNĐ</Label>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="compact" id="r3" />
+                  <div className="flex items-center gap-4">
+                    <RadioGroupItem value="above-3000000" id="r3" />
                     <Label htmlFor="r3">Từ 3.000.000 VNĐ</Label>
                   </div>
                 </RadioGroup>
               </AccordionContent>
             </FormItem>
           </AccordionItem>
-
-          {/* <AccordionItem value="item-2">
-            <AccordionTrigger>Nhom hang</AccordionTrigger>
-            {data.collections
-              .filter((collection) => collection !== null)
-              .map((collection) => (
-                <AccordionContent key={collection._id}>
-                  {collection}
-                </AccordionContent>
-              ))}
-          </AccordionItem>
-          <AccordionItem value="item-3">
-            <AccordionTrigger>Kich thuoc</AccordionTrigger>
-            {filterList.sizes
-              .filter((size) => size !== null)
-              .map((size) => (
-                <AccordionContent key={size}>{size}</AccordionContent>
-              ))}
-          </AccordionItem>
-          <AccordionItem value="item-4">
-            <AccordionTrigger>Gia</AccordionTrigger>
-            <AccordionContent>
-              <input
-                type="range"
-                min={filterList.minPrice}
-                max={filterList.maxPrice}
-              />
-            </AccordionContent>
-          </AccordionItem> */}
         </Accordion>
-        <button type="submit">Filter</button>
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            className="basis-full"
+            onClick={() => form.reset({
+              brands: [],
+              sizes: [],
+              collections: [],
+              minPrice: null,
+              maxPrice: null,
+            })}
+          >
+            Xóa bộ lọc
+          </Button>
+          <Button type="submit" size="sm" className="basis-full">
+            Áp dụng
+          </Button>
+        </div>
       </form>
     </Form>
   );

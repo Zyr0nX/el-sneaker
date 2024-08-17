@@ -15,6 +15,7 @@ const buttonVariants = cva(
         ghost: "bg-transparent hover:bg-brand-500/10",
       },
       size: {
+        sm: "text-sm py-1.5 px-3",
         md: "px-3 py-2",
         lg: "px-6 py-2.5",
         icon: "w-12 h-12",
