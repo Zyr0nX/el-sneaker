@@ -21,11 +21,11 @@ export default async function Header() {
   if (!headerContent) return null;
   return (
     <header className="bg-white h-[4.6875rem] flex justify-between px-[6.25rem] items-center">
-      <div className="font-gilroy font-bold text-[2.5rem] text-neutral-900">
+      <Link className="font-gilroy font-bold text-[2.5rem] text-neutral-900" href="/" >
         {headerContent.logo && (
           <PortableText value={headerContent.logo} components={components} />
         )}
-      </div>
+      </Link>
       <div>
         {headerContent.links &&
           headerContent.links.map((link) => {
