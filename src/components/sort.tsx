@@ -42,34 +42,49 @@ export function Sort() {
           <ChevronDownIcon className="h-5 w-5" />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="p-3 flex flex-col rounded-lg bg-white">
+      <DropdownMenuContent
+        asChild
+        className="p-3 flex flex-col rounded-lg bg-white"
+      >
         <DropdownMenuRadioGroup value={sort} onValueChange={handleSortChange}>
-          <DropdownMenuRadioItem
-            value="popular"
-            className={cn(
-              "rounded-lg hover:bg-brand-50 p-2 outline-none",
-              sort != "asc" && sort != "desc" && "bg-brand-200"
-            )}
-          >
-            <p>Phổ biến nhất</p>
+          <DropdownMenuRadioItem asChild value="popular">
+            <Button
+              variant="text"
+              className={cn(
+                "justify-normal rounded-lg p-2 text-neutral-900",
+                sort != "asc" && sort != "desc"
+                  ? "bg-brand-500 text-neutral-50"
+                  : "hover:bg-brand-50"
+              )}
+            >
+              Phổ biến nhất
+            </Button>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value="asc"
-            className={cn(
-              "rounded-lg hover:bg-brand-50 p-2 outline-none",
-              sort == "asc" && "bg-brand-200"
-            )}
-          >
-            <span>Giá thấp đến cao</span>
+          <DropdownMenuRadioItem asChild value="asc">
+            <Button
+              variant="text"
+              className={cn(
+                "justify-normal rounded-lg p-2 text-neutral-900",
+                sort === "asc"
+                  ? "bg-brand-500 text-neutral-50"
+                  : "hover:bg-brand-50"
+              )}
+            >
+              Giá thấp đến cao
+            </Button>
           </DropdownMenuRadioItem>
-          <DropdownMenuRadioItem
-            value="desc"
-            className={cn(
-              "rounded-lg hover:bg-brand-50 p-2 outline-none",
-              sort == "desc" && "bg-brand-200"
-            )}
-          >
-            <span>Giá cao đến thấp</span>
+          <DropdownMenuRadioItem asChild value="desc">
+            <Button
+              variant="text"
+              className={cn(
+                "justify-normal rounded-lg p-2 text-neutral-900",
+                sort === "desc"
+                  ? "bg-brand-500 text-neutral-50"
+                  : "hover:bg-brand-50"
+              )}
+            >
+              Giá cao đến thấp
+            </Button>
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>

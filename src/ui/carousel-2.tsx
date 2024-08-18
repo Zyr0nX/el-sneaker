@@ -325,12 +325,14 @@ export const DotButtons: React.FC<PropType> = (props) => {
 
 CarouselNext.displayName = "CarouselNext";
 
-export const Thumbs = ({ images } : { images: Array<{
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-    }}>}) => {
+export const Thumbs = ({
+  images,
+}: {
+  images: {
+    key: string;
+    ref: string | null;
+  }[];
+}) => {
   const { api } = useCarousel();
 
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
@@ -370,7 +372,7 @@ export const Thumbs = ({ images } : { images: Array<{
             className={`flex-shrink-0 grow-0 basis-1/5 max-w-32 rounded-2xl overflow-hidden ${index == selectedIndex ? "outline-2 outline outline-brand-300 -outline-offset-2" : ""}`}
             onClick={() => onThumbClick(index)}
           >
-            <Image id={image.asset?._ref} className="object-cover w-fit" />
+            <Image id={image.ref} alt="" className="object-cover w-fit" />
           </div>
         ))}
       </div>

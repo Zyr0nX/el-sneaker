@@ -1,10 +1,4 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import { ClientProviders } from "./provider";
-import { gilroy } from "~/utils/font/gilroy";
-import { beVietnamPro } from "~/utils/font/be-vietnam-pro";
-import Header from "~/components/header";
-import Footer from "~/components/footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,14 +12,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`text-neutral-900 ${gilroy.variable} ${beVietnamPro.className}`}
-      >
-        <ClientProviders>
-          <Header />
-          <main>{children}</main>
-          <Footer />
-        </ClientProviders>
+      <body>
+        {children}
       </body>
     </html>
   );

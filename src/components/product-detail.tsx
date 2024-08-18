@@ -12,11 +12,14 @@ export default async function ProductDetail({
 }) {
   const sneakerQuery = groq`*[_type == "sneaker" && slug.current == 'nb9060-quartz-grey'][0]{
     name,
-    brand->{name},
-    collection->{name},
+    "brand": brand->name,
+    "collection": collection->name,
     price,
     description,
-    images
+    "images": images[]{
+      "key": _key,
+      "ref": asset._ref
+    }
   }`;
   const sneakerContent = await client.fetch<SneakerQueryResult>(
     sneakerQuery,
@@ -35,9 +38,10 @@ export default async function ProductDetail({
               <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100" />
               <CarouselContent>
                 {sneakerContent.images.map((image) => (
-                  <CarouselItem key={image._key}>
+                  <CarouselItem key={image.key}>
                     <Image
-                      id={image.asset?._ref}
+                      id={image.ref}
+                      alt=""
                       className="object-cover w-fit"
                     />
                   </CarouselItem>
@@ -56,7 +60,7 @@ export default async function ProductDetail({
         <div className="flex flex-col gap-1">
           <h2 className="font-semibold text-[2rem]">{sneakerContent.name}</h2>
           <p className="font-medium text-lg text-neutral-400">
-            {sneakerContent.brand?.name}
+            {sneakerContent.brand}
           </p>
           <p className="font-semibold text-2xl text-brand-500">
             {sneakerContent.price?.toLocaleString("vi-VN")}đ
@@ -354,6 +358,9 @@ export default async function ProductDetail({
             <div className="py-1.5 px-4 outline-1 outline font-semibold outline-brand-500 text-brand-500 rounded-full">
               43
             </div>
+          </div>
+          <div>
+            <p>Mã SKU: <span>XXXABC</span></p>
           </div>
         </div>
       </div>

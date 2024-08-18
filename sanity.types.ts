@@ -478,46 +478,22 @@ export type BannerQueryResult = {
 } | null;
 // Source: ./src/components/product-count.tsx
 // Variable: productCountQuery
-// Query: count(*[_type == "sneaker"       && (!defined($brands) || brand->slug.current in $brands)      && (!defined($collections) || collection->slug.current in $collections)      && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)      && (!defined($from) || price >= $from)      && (!defined($to) || price <= $to)    ])
+// Query: count(*[_type == "sneaker"       && (!defined($brands) || brand->slug.current in $brands)      && (!defined($collections) || collection->slug.current in $collections)      && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)      && (!defined($minPrice) || price >= $minPrice)      && (!defined($maxPrice) || price <= $maxPrice)    ])
 export type ProductCountQueryResult = number;
 // Source: ./src/components/product-detail.tsx
 // Variable: sneakerQuery
-// Query: *[_type == "sneaker" && slug.current == 'nb9060-quartz-grey'][0]{    name,    brand->{name},    collection->{name},    price,    description,    images  }
+// Query: *[_type == "sneaker" && slug.current == 'nb9060-quartz-grey'][0]{    name,    "brand": brand->name,    "collection": collection->name,    price,    description,    "images": images[]{      "key": _key,      "ref": asset._ref    }  }
 export type SneakerQueryResult = {
   name: string | null;
-  brand: {
-    name: string | null;
-  } | null;
-  collection: {
-    name: string | null;
-  } | null;
+  brand: string | null;
+  collection: string | null;
   price: number | null;
   description: null;
   images: Array<{
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-    _key: string;
+    key: string;
+    ref: string | null;
   }> | null;
 } | null;
-// Source: ./src/components/product-list.tsx
-// Variable: sneakerListQuery
-// Query: *[_type == "sneaker"     && (!defined($brands) || brand->slug.current in $brands)    && (!defined($collections) || collection->slug.current in $collections)    && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)    && (!defined($from) || price >= $from)    && (!defined($to) || price <= $to)    ][0...12]{      _id,      "slug": slug.current,      name,      price,      "brand": brand->name,      "collection": collection->name,      "image": images[0].asset._ref    }
-export type SneakerListQueryResult = Array<{
-  _id: string;
-  slug: string | null;
-  name: string | null;
-  price: number | null;
-  brand: string | null;
-  collection: string | null;
-  image: string | null;
-}>;
 // Source: ./src/components/trending.tsx
 // Variable: trendingQuery
 // Query: *[_type == "trending"][0]{    title,    viewAllLink,    'sneakers': sneakers[]->{      _id,      name,      price,      "slug":slug.current,      "brand":brand->name,      "image":images[0].asset._ref,    }}

@@ -9,16 +9,16 @@ import { getCookie } from "cookies-next";
 export default async function ProductListProvider({
   brands,
   sizes,
-  from,
-  to,
+  minPrice,
+  maxPrice,
   collections,
   sort,
   page,
 }: {
   brands?: string;
   sizes?: string;
-  from?: string;
-  to?: string;
+  minPrice?: string;
+  maxPrice?: string;
   collections?: string;
   sort?: string;
   page?: string;
@@ -43,8 +43,8 @@ export default async function ProductListProvider({
     && (!defined($brands) || brand->slug.current in $brands)
     && (!defined($collections) || collection->slug.current in $collections)
     && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
-    && (!defined($from) || price >= $from)
-    && (!defined($to) || price <= $to)
+    && (!defined($minPrice) || price >= $minPrice)
+    && (!defined($maxPrice) || price <= $maxPrice)
     // && (!defined($lastAscs) || !defined($lastIdsAsc) || price > $lastAscs || (price == $lastAscs && _id > $lastIdsAsc))
     ]|order(price asc)[$first...$last]{
       _id,
@@ -59,8 +59,8 @@ export default async function ProductListProvider({
     && (!defined($brands) || brand->slug.current in $brands)
     && (!defined($collections) || collection->slug.current in $collections)
     && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
-    && (!defined($from) || price >= $from)
-    && (!defined($to) || price <= $to)
+    && (!defined($minPrice) || price >= $minPrice)
+    && (!defined($maxPrice) || price <= $maxPrice)
     // && (!defined($lastDescs) || !defined($lastIdsDesc) || price > $lastDescs || (price == $lastDescs && _id > $lastIdsDesc))
     ]|order(price desc)[$first...$last]{
       _id,
@@ -74,9 +74,9 @@ export default async function ProductListProvider({
     && (!defined($brands) || brand->slug.current in $brands)
     && (!defined($collections) || collection->slug.current in $collections)
     && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
-    && (!defined($from) || price >= $from)
-    && (!defined($to) || price <= $to)
-    //TODO
+    && (!defined($minPrice) || price >= $minPrice)
+    && (!defined($maxPrice) || price <= $maxPrice)
+    //maxPriceDO
     ][$first...$last]{
       _id,
       "slug": slug.current,
@@ -120,8 +120,8 @@ export default async function ProductListProvider({
             .map((item) => Number(item))
         : null,
       collections: collections ? collections.split(",") : null,
-      from: from || null,
-      to: to || null,
+      minPrice: minPrice || null,
+      maxPrice: maxPrice || null,
       lastAscs: page
         ? lastAscs[Number(page) - 1]
           ? lastAscs[Number(page) - 1]

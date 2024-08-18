@@ -4,6 +4,8 @@ import ProductCount from "~/components/product-count";
 import { Sort } from "~/components/sort";
 import ProductPaginationProvider from "~/components/product-pagination-provider";
 import ProductListProvider from "~/components/product-list-provider";
+import ProductCountSkeleton from "~/components/product-count-skeleton";
+import ProductListSkeleton from "~/components/product-list-skeleton";
 
 export default async function PostIndex({
   searchParams,
@@ -11,8 +13,8 @@ export default async function PostIndex({
   searchParams: {
     brands?: string;
     sizes?: string;
-    from?: string;
-    to?: string;
+    minPrice?: string;
+    maxPrice?: string;
     collections?: string;
     sort?: string;
     page?: string;
@@ -23,8 +25,8 @@ export default async function PostIndex({
       brands: searchParams.brands,
       sizes: searchParams.sizes,
       collections: searchParams.collections,
-      from: searchParams.from,
-      to: searchParams.to,
+      from: searchParams.minPrice,
+      to: searchParams.maxPrice,
       sort: searchParams.sort,
       page: searchParams.page,
     })
@@ -36,60 +38,64 @@ export default async function PostIndex({
         <div className="w-72 shrink-0">
           <FilterProvider />
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 w-full">
           <div className="flex justify-between items-center">
-            <Suspense fallback={<div>Loading...</div>}>
-              <ProductCount
-                key={JSON.stringify({
-                  brands: searchParams.brands,
-                  sizes: searchParams.sizes,
-                  collections: searchParams.collections,
-                  from: searchParams.from,
-                  to: searchParams.to,
-                })}
-                brands={searchParams.brands}
-                sizes={searchParams.sizes}
-                collections={searchParams.collections}
-                from={searchParams.from}
-                to={searchParams.to}
-              />
-            </Suspense>
-            <Sort />
-          </div>
-          <Suspense fallback={<div>Loading...</div>}>
-            <ProductListProvider
+            <Suspense
               key={JSON.stringify({
                 brands: searchParams.brands,
                 sizes: searchParams.sizes,
                 collections: searchParams.collections,
-                from: searchParams.from,
-                to: searchParams.to,
-                sort: searchParams.sort,
-                page: searchParams.page,
+                minPrice: searchParams.minPrice,
+                maxPrice: searchParams.maxPrice,
               })}
+              fallback={<ProductCountSkeleton />}
+            >
+              <ProductCount
+                brands={searchParams.brands}
+                sizes={searchParams.sizes}
+                collections={searchParams.collections}
+                minPrice={searchParams.minPrice}
+                maxPrice={searchParams.maxPrice}
+              />
+            </Suspense>
+            <Sort />
+          </div>
+          <Suspense
+            key={JSON.stringify({
+              brands: searchParams.brands,
+              sizes: searchParams.sizes,
+              collections: searchParams.collections,
+              minPrice: searchParams.minPrice,
+              maxPrice: searchParams.maxPrice,
+              sort: searchParams.sort,
+              page: searchParams.page,
+            })}
+            fallback={<ProductListSkeleton />}
+          >
+            <ProductListProvider
               brands={searchParams.brands}
               sizes={searchParams.sizes}
               collections={searchParams.collections}
-              from={searchParams.from}
-              to={searchParams.to}
+              minPrice={searchParams.minPrice}
+              maxPrice={searchParams.maxPrice}
               sort={searchParams.sort}
               page={searchParams.page}
             />
           </Suspense>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense>
             <ProductPaginationProvider
               key={JSON.stringify({
                 brands: searchParams.brands,
                 sizes: searchParams.sizes,
                 collections: searchParams.collections,
-                from: searchParams.from,
-                to: searchParams.to,
+                from: searchParams.minPrice,
+                to: searchParams.maxPrice,
               })}
               brands={searchParams.brands}
               sizes={searchParams.sizes}
               collections={searchParams.collections}
-              from={searchParams.from}
-              to={searchParams.to}
+              from={searchParams.minPrice}
+              to={searchParams.maxPrice}
             />
           </Suspense>
         </div>
