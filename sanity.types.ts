@@ -567,12 +567,17 @@ export type SneakerCountQueryResult = {
 
 // Source: ./src/components/product-detail.tsx
 // Variable: sneakerQuery
-// Query: *[_type == "sneaker" && slug.current == $sneakerSlug][0]{    name,    "brand": brand->name,    "collection": collection->name,    price,    description,    "images": images[]{      "key": _key,      "ref": asset._ref    },    sku,    content,  }
+// Query: *[_type == "sneaker" && slug.current == $sneakerSlug][0]{    name,    "brand": brand->name,    "collection": collection->name,    price,    "sizes": sizes[]{_key, size, out_of_stock},    description,    "images": images[]{      "key": _key,      "ref": asset._ref    },    sku,    content,  }
 export type SneakerQueryResult = {
   name: string | null;
   brand: string | null;
   collection: string | null;
   price: number | null;
+  sizes: Array<{
+    _key: string;
+    size: number | null;
+    out_of_stock: boolean | null;
+  }> | null;
   description: null;
   images: Array<{
     key: string;
@@ -599,21 +604,11 @@ export type SneakerQueryResult = {
   }> | null;
 } | null;
 // Variable: sneakerDetailQuery
-// Query: *[_type == "sneakerDetail"][0]{    sizeLabel,    sizeGuideLabel,    sizeGuideImage,    skuLabel,    contactLabel,    social[]->{      _id,      socialPlatform,      title,      link}  }
+// Query: *[_type == "sneakerDetail"][0]{    sizeLabel,    sizeGuideLabel,    "sizeGuideImage": sizeGuideImage.asset._ref,    skuLabel,    contactLabel,    social[]->{      _id,      socialPlatform,      title,      link}  }
 export type SneakerDetailQueryResult = {
   sizeLabel: string | null;
   sizeGuideLabel: string | null;
-  sizeGuideImage: {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-  } | null;
+  sizeGuideImage: string | null;
   skuLabel: string | null;
   contactLabel: string | null;
   social: Array<{
