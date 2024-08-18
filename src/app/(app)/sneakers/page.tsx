@@ -6,6 +6,7 @@ import ProductPaginationProvider from "~/components/product-pagination-provider"
 import ProductListProvider from "~/components/product-list-provider";
 import ProductCountSkeleton from "~/components/product-count-skeleton";
 import ProductListSkeleton from "~/components/product-list-skeleton";
+import SortProvider from "~/components/sort-provider";
 
 export default async function PostIndex({
   searchParams,
@@ -58,7 +59,7 @@ export default async function PostIndex({
                 maxPrice={searchParams.maxPrice}
               />
             </Suspense>
-            <Sort />
+            <SortProvider />
           </div>
           <Suspense
             key={JSON.stringify({

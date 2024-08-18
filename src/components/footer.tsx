@@ -3,7 +3,7 @@ import { client } from "~/sanity/lib/client";
 import { groq, PortableText } from "next-sanity";
 import { FooterQueryResult } from "../../sanity.types";
 import { components } from "~/utils/portabletext/components";
-import { Link } from "~/ui/link";
+import Link from "next/link";
 import End from "~/icons/end";
 import FacebookWhite from "~/icons/facebook-white";
 import InstagramWhite from "~/icons/instagram-white";
@@ -43,7 +43,7 @@ export default async function Footer() {
           <h2 className="font-gilroy font-extrabold text-[4rem] leading-none">
             {footerContent.title}
           </h2>
-          <Link variant="text" className="flex gap-2 items-center w-fit">
+          <Link href="/sneakers" className="flex gap-2 items-center w-fit text-brand-500 font-semibold">
             {footerContent.button?.text}
             <End />
           </Link>
@@ -71,24 +71,28 @@ export default async function Footer() {
               ))}
             </div>
           </div>
-          <div className="flex gap-4 py-2">
-            {footerContent.socialPlatformIcon?.map((icon) => (
-              <Link
-                target="_blank"
-                variant="link"
-                key={icon.link?._type}
-                href={icon.link?.url}
-              >
-                {icon.socialPlatform == "facebook" ? (
-                  <FacebookWhite />
-                ) : icon.socialPlatform == "instagram" ? (
-                  <InstagramWhite />
-                ) : icon.socialPlatform == "website" ? (
-                  <WebsiteWhite />
-                ) : null}
-              </Link>
-            ))}
-          </div>
+          {footerContent.socialPlatformIcon && (
+            <div className="flex gap-4 py-2">
+              {footerContent.socialPlatformIcon.filter((icon) => icon.link !== null).map((icon) => {
+                if (!icon.link || !icon.link.url) return null;
+                return (
+                  <Link
+                    target="_blank"
+                    key={icon.link._type}
+                    href={icon.link.url}
+                  >
+                    {icon.socialPlatform == "facebook" ? (
+                      <FacebookWhite />
+                    ) : icon.socialPlatform == "instagram" ? (
+                      <InstagramWhite />
+                    ) : icon.socialPlatform == "website" ? (
+                      <WebsiteWhite />
+                    ) : null}
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
       <div className="flex justify-center items-center">

@@ -1,7 +1,7 @@
 import { groq } from 'next-sanity';
 import React from 'react'
 import { client } from '~/sanity/lib/client';
-import { ProductCountQueryResult } from '../../sanity.types';
+import { ProductCountQueryResult, SneakerCountQueryResult } from '../../sanity.types';
 
 export default async function ProductCount({
   brands,
@@ -40,5 +40,11 @@ export default async function ProductCount({
     }
   );
 
-  return <p className="font-semibold">{productCount} sản phẩm</p>;
+  const sneakerCountQuery = groq`*[_type == "sneakerCount"][0]{
+    countLabel
+  }`;
+
+  const sneakerCount = await client.fetch<SneakerCountQueryResult>(sneakerCountQuery);
+
+  return <p className="font-semibold">{sneakerCount?.countLabel?.replace('{{count}}', productCount.toString())}</p>;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect } from "react";
-import { FilterQueryResult } from "../../sanity.types";
+import { FilterLabelQueryResult, FilterQueryResult } from "../../sanity.types";
 import {
   Accordion,
   AccordionContent,
@@ -38,7 +38,7 @@ const FormSchema = z.object({
   maxPrice: z.number().nullable(),
 });
 
-export default function Filter({ filter }: { filter: FilterQueryResult }) {
+export default function Filter({ filter, filterLabel }: { filter: FilterQueryResult, filterLabel: FilterLabelQueryResult }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -135,7 +135,7 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
           <AccordionItem value="item-1" asChild>
             <FormItem>
               <AccordionTrigger className="text-lg uppercase font-medium">
-                Thương hiệu
+                {filterLabel?.brandLabel || ""}
               </AccordionTrigger>
               <AccordionContent>
                 {filter.brands
@@ -183,7 +183,7 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
           <AccordionItem value="item-2" asChild>
             <FormItem>
               <AccordionTrigger className="text-lg uppercase font-medium">
-                Nhóm hàng
+                {filterLabel?.collectionLabel || ""}
               </AccordionTrigger>
               <AccordionContent>
                 {filter.collections.map((collection) => (
@@ -229,7 +229,7 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
           <AccordionItem value="item-3" asChild>
             <FormItem>
               <AccordionTrigger className="text-lg uppercase font-medium">
-                Kích thước
+                {filterLabel?.sizeLabel || ""}
               </AccordionTrigger>
               <AccordionContent>
                 {filter.sizes.map((size) => (
@@ -270,7 +270,7 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
           <AccordionItem value="item-4" asChild>
             <FormItem>
               <AccordionTrigger className="text-lg uppercase font-medium">
-                Giá
+                {filterLabel?.priceLabel || ""}
               </AccordionTrigger>
               <AccordionContent className="flex flex-col gap-3">
                 <div className="flex gap-3">
@@ -446,18 +446,20 @@ export default function Filter({ filter }: { filter: FilterQueryResult }) {
             variant="secondary"
             size="sm"
             className="basis-full"
-            onClick={() => form.reset({
-              brands: [],
-              sizes: [],
-              collections: [],
-              minPrice: null,
-              maxPrice: null,
-            })}
+            onClick={() =>
+              form.reset({
+                brands: [],
+                sizes: [],
+                collections: [],
+                minPrice: null,
+                maxPrice: null,
+              })
+            }
           >
-            Xóa bộ lọc
+            {filterLabel?.resetLabel}
           </Button>
           <Button type="submit" size="sm" className="basis-full">
-            Áp dụng
+            {filterLabel?.applyLabel}
           </Button>
         </div>
       </form>

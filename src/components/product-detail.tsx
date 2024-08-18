@@ -1,16 +1,32 @@
-import { groq } from "next-sanity";
+import { groq, PortableText } from "next-sanity";
 import React from "react";
 import { client } from "~/sanity/lib/client";
-import { SneakerQueryResult } from "../../sanity.types";
+import {
+  SneakerDetailQueryResult,
+  SneakerQueryResult,
+} from "../../sanity.types";
 import { Image } from "~/utils/sanity/image";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, Thumbs } from "~/ui/carousel-2";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  Thumbs,
+} from "~/ui/carousel-2";
+import { components } from "~/utils/portabletext/components";
+import Link from "next/link";
+import Facebook from "~/icons/facebook";
+import Instagram from "~/icons/instagram";
+import Zalo from "~/icons/zalo";
+import Gmail from "~/icons/gmail";
 
 export default async function ProductDetail({
   sneakerSlug,
 }: {
   sneakerSlug: string;
 }) {
-  const sneakerQuery = groq`*[_type == "sneaker" && slug.current == 'nb9060-quartz-grey'][0]{
+  const sneakerQuery = groq`*[_type == "sneaker" && slug.current == $sneakerSlug][0]{
     name,
     "brand": brand->name,
     "collection": collection->name,
@@ -19,7 +35,9 @@ export default async function ProductDetail({
     "images": images[]{
       "key": _key,
       "ref": asset._ref
-    }
+    },
+    sku,
+    content,
   }`;
   const sneakerContent = await client.fetch<SneakerQueryResult>(
     sneakerQuery,
@@ -28,32 +46,50 @@ export default async function ProductDetail({
       next: { tags: ["sneaker", sneakerSlug] },
     }
   );
-  if (!sneakerContent || !sneakerContent.images) return null;
+
+  if (!sneakerContent) return null;
+
+  const sneakerDetailQuery = groq`*[_type == "sneakerDetail"][0]{
+    sizeLabel,
+    sizeGuideLabel,
+    sizeGuideImage,
+    skuLabel,
+    contactLabel,
+    social[]->{
+      _id,
+      socialPlatform,
+      title,
+      link}
+  }`;
+  const sneakerDetail =
+    await client.fetch<SneakerDetailQueryResult>(sneakerDetailQuery);
   return (
     <div className="px-[6.25rem] py-11 flex gap-[4.5rem] w-full ">
       <div className="max-w-full w-1/2">
-        <Carousel>
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center justify-between gap-4">
-              <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100" />
-              <CarouselContent>
-                {sneakerContent.images.map((image) => (
-                  <CarouselItem key={image.key}>
-                    <Image
-                      id={image.ref}
-                      alt=""
-                      className="object-cover w-fit"
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
+        {sneakerContent.images && sneakerContent.images.length > 0 && (
+          <Carousel>
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center justify-between gap-4">
+                <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100" />
+                <CarouselContent>
+                  {sneakerContent.images.map((image) => (
+                    <CarouselItem key={image.key}>
+                      <Image
+                        id={image.ref}
+                        alt=""
+                        className="object-cover w-fit rounded-2xl"
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
 
-              <CarouselNext className="static shrink-0 -translate-y-0  bg-neutral-100" />
+                <CarouselNext className="static shrink-0 -translate-y-0  bg-neutral-100" />
+              </div>
+
+              <Thumbs images={sneakerContent.images} />
             </div>
-
-            <Thumbs images={sneakerContent.images} />
-          </div>
-        </Carousel>
+          </Carousel>
+        )}
       </div>
 
       <div className="flex flex-col gap-8">
@@ -68,7 +104,7 @@ export default async function ProductDetail({
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex justify-between">
-            <p className="font-medium">Kích cỡ</p>
+            <p className="font-medium">{sneakerDetail?.sizeLabel}</p>
             <div className="flex gap-2">
               <svg
                 width="24"
@@ -330,10 +366,11 @@ export default async function ProductDetail({
                   mask="url(#path-41-inside-21_245_3114)"
                 />
               </svg>
-              <p className="underline">Hướng dẫn chọn size</p>
+              <p className="underline">{sneakerDetail?.sizeGuideLabel}</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-4">
+            {sneakerContent.}
             <div className="py-1.5 px-4 outline-1 outline font-semibold outline-brand-500 text-brand-500 rounded-full">
               36
             </div>
@@ -359,10 +396,50 @@ export default async function ProductDetail({
               43
             </div>
           </div>
-          <div>
-            <p>Mã SKU: <span>XXXABC</span></p>
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-2.5 text-lg">
+              <p className="font-medium">{sneakerDetail?.skuLabel}</p>
+              <p className="font-light">{sneakerContent.sku}</p>
+            </div>
+            {sneakerContent.content && (
+              <div className="list-disc">
+                <PortableText
+                  value={sneakerContent.content}
+                  components={components}
+                />
+              </div>
+            )}
           </div>
         </div>
+        {sneakerDetail && sneakerDetail.social && (
+          <div className="flex flex-col gap-3">
+            <p className="font-medium text-lg">{sneakerDetail.contactLabel}</p>
+            <div className="grid grid-cols-2 gap-3">
+              {sneakerDetail.social.map((social) => {
+                if (!social.link || !social.link.url) return null;
+                return (
+                  <Link
+                    className="flex gap-3 hover:underline hover:text-brand-500"
+                    target="_blank"
+                    key={social._id}
+                    href={social.link.url}
+                  >
+                    {social.socialPlatform == "facebook" ? (
+                      <Facebook />
+                    ) : social.socialPlatform == "instagram" ? (
+                      <Instagram />
+                    ) : social.socialPlatform == "zalo" ? (
+                      <Zalo />
+                    ) : social.socialPlatform === "email" ? (
+                      <Gmail />
+                    ) : null}
+                    <p>{social.link.text}</p>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

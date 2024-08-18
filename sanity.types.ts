@@ -68,6 +68,71 @@ export type Geopoint = {
   alt?: number;
 };
 
+export type SneakerDetail = {
+  _id: string;
+  _type: "sneakerDetail";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  sizeLabel?: string;
+  sizeGuideLabel?: string;
+  sizeGuideImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  skuLabel?: string;
+  contactLabel?: string;
+  social?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "social";
+  }>;
+};
+
+export type Sort = {
+  _id: string;
+  _type: "sort";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  sortByLabel?: string;
+  polularLabel?: string;
+  priceAscLabel?: string;
+  priceDescLabel?: string;
+};
+
+export type SneakerCount = {
+  _id: string;
+  _type: "sneakerCount";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  countLabel?: string;
+};
+
+export type Filter = {
+  _id: string;
+  _type: "filter";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  brandLabel?: string;
+  collectionLabel?: string;
+  sizeLabel?: string;
+  priceLabel?: string;
+  resetLabel?: string;
+  applyLabel?: string;
+};
+
 export type Footer = {
   _id: string;
   _type: "footer";
@@ -115,7 +180,7 @@ export type Social = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  socialPlatform: "facebook" | "instagram" | "zalo" | "email" | "phoneNumber" | "website";
+  socialPlatform?: "facebook" | "instagram" | "zalo" | "email" | "phoneNumber" | "website";
   title?: string;
   link?: Link;
 };
@@ -203,8 +268,8 @@ export type Trending = {
 
 export type Link = {
   _type: "link";
-  text: string;
-  url: string;
+  text?: string;
+  url?: string;
 };
 
 export type Size = {
@@ -349,7 +414,7 @@ export type SanityImageMetadata = {
 
 export type Slug = {
   _type: "slug";
-  current: string;
+  current?: string;
   source?: string;
 };
 
@@ -386,7 +451,7 @@ export type HslaColor = {
   a?: number;
 };
 
-export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Footer | Social | Header | RichText | Banner | Trending | Link | Size | Sneaker | Collection | Brand | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Slug | Color | RgbaColor | HsvaColor | HslaColor;
+export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | SneakerDetail | Sort | SneakerCount | Filter | Footer | Social | Header | RichText | Banner | Trending | Link | Size | Sneaker | Collection | Brand | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Slug | Color | RgbaColor | HsvaColor | HslaColor;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/components/filter-provider.tsx
 // Variable: filterQuery
@@ -406,6 +471,17 @@ export type FilterQueryResult = {
   minPrice: number | null;
   maxPrice: number | null;
 };
+// Variable: filterLabelQuery
+// Query: *[_type == "filter"][0]{    brandLabel,    collectionLabel,    sizeLabel,    priceLabel,    resetLabel,    applyLabel  }
+export type FilterLabelQueryResult = {
+  brandLabel: string | null;
+  collectionLabel: string | null;
+  sizeLabel: string | null;
+  priceLabel: string | null;
+  resetLabel: string | null;
+  applyLabel: string | null;
+} | null;
+
 // Source: ./src/components/footer.tsx
 // Variable: footerQuery
 // Query: *[_type == "footer"][0]{    title,    logo,    additionalInformation,    'socialPlatformIcon': socialPlatformIcon[]->{      socialPlatform,      link    },    'socialPlatform': socialPlatform[]->{      title,      link    },    button{      text    },    links[]{_key, url, text}    }
@@ -429,7 +505,7 @@ export type FooterQueryResult = {
   }> | null;
   additionalInformation: Array<string> | null;
   socialPlatformIcon: Array<{
-    socialPlatform: "email" | "facebook" | "instagram" | "phoneNumber" | "website" | "zalo";
+    socialPlatform: "email" | "facebook" | "instagram" | "phoneNumber" | "website" | "zalo" | null;
     link: Link | null;
   }> | null;
   socialPlatform: Array<{
@@ -437,10 +513,11 @@ export type FooterQueryResult = {
     link: Link | null;
   }> | null;
   button: {
-    text: string;
+    text: string | null;
   } | null;
   links: null;
 } | null;
+
 // Source: ./src/components/header.tsx
 // Variable: headerQuery
 // Query: *[_type == "header"][0]{    logo,    links[]{_key, url, text}    }
@@ -463,10 +540,11 @@ export type HeaderQueryResult = {
   }> | null;
   links: Array<{
     _key: string;
-    url: string;
-    text: string;
+    url: string | null;
+    text: string | null;
   }> | null;
 } | null;
+
 // Source: ./src/components/hero.tsx
 // Variable: bannerQuery
 // Query: *[_type == "banner"][0]{    images[]{_key, 'ref':asset._ref}    }
@@ -476,13 +554,20 @@ export type BannerQueryResult = {
     ref: string | null;
   }> | null;
 } | null;
+
 // Source: ./src/components/product-count.tsx
 // Variable: productCountQuery
 // Query: count(*[_type == "sneaker"       && (!defined($brands) || brand->slug.current in $brands)      && (!defined($collections) || collection->slug.current in $collections)      && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)      && (!defined($minPrice) || price >= $minPrice)      && (!defined($maxPrice) || price <= $maxPrice)    ])
 export type ProductCountQueryResult = number;
+// Variable: sneakerCountQuery
+// Query: *[_type == "sneakerCount"][0]{    countLabel  }
+export type SneakerCountQueryResult = {
+  countLabel: string | null;
+} | null;
+
 // Source: ./src/components/product-detail.tsx
 // Variable: sneakerQuery
-// Query: *[_type == "sneaker" && slug.current == 'nb9060-quartz-grey'][0]{    name,    "brand": brand->name,    "collection": collection->name,    price,    description,    "images": images[]{      "key": _key,      "ref": asset._ref    }  }
+// Query: *[_type == "sneaker" && slug.current == $sneakerSlug][0]{    name,    "brand": brand->name,    "collection": collection->name,    price,    description,    "images": images[]{      "key": _key,      "ref": asset._ref    },    sku,    content,  }
 export type SneakerQueryResult = {
   name: string | null;
   brand: string | null;
@@ -493,7 +578,52 @@ export type SneakerQueryResult = {
     key: string;
     ref: string | null;
   }> | null;
+  sku: string | null;
+  content: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
 } | null;
+// Variable: sneakerDetailQuery
+// Query: *[_type == "sneakerDetail"][0]{    sizeLabel,    sizeGuideLabel,    sizeGuideImage,    skuLabel,    contactLabel,    social[]->{      _id,      socialPlatform,      title,      link}  }
+export type SneakerDetailQueryResult = {
+  sizeLabel: string | null;
+  sizeGuideLabel: string | null;
+  sizeGuideImage: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  skuLabel: string | null;
+  contactLabel: string | null;
+  social: Array<{
+    _id: string;
+    socialPlatform: "email" | "facebook" | "instagram" | "phoneNumber" | "website" | "zalo" | null;
+    title: string | null;
+    link: Link | null;
+  }> | null;
+} | null;
+
 // Source: ./src/components/product-list-provider.tsx
 // Variable: sneakerListQueryAsc
 // Query: *[_type == "sneaker"     && (!defined($brands) || brand->slug.current in $brands)    && (!defined($collections) || collection->slug.current in $collections)    && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)    && (!defined($minPrice) || price >= $minPrice)    && (!defined($maxPrice) || price <= $maxPrice)    // && (!defined($lastAscs) || !defined($lastIdsAsc) || price > $lastAscs || (price == $lastAscs && _id > $lastIdsAsc))    ]|order(price asc)[$first...$last]{      _id,      "slug": slug.current,      name,      price,      "brand": brand->name,      "image": images[0].asset._ref    }
@@ -525,6 +655,17 @@ export type SneakerListQueryPopularResult = Array<{
   brand: string | null;
   image: string | null;
 }>;
+
+// Source: ./src/components/sort-provider.tsx
+// Variable: sortQuery
+// Query: *[_type == "sort"][0]{        sortByLabel,        polularLabel,        priceAscLabel,        priceDescLabel  }
+export type SortQueryResult = {
+  sortByLabel: string | null;
+  polularLabel: string | null;
+  priceAscLabel: string | null;
+  priceDescLabel: string | null;
+} | null;
+
 // Source: ./src/components/trending.tsx
 // Variable: trendingQuery
 // Query: *[_type == "trending"][0]{    title,    viewAllLink,    'sneakers': sneakers[]->{      _id,      name,      price,      "slug":slug.current,      "brand":brand->name,      "image":images[0].asset._ref,    }}
@@ -540,3 +681,11 @@ export type TrendingQueryResult = {
     image: string | null;
   }> | null;
 } | null;
+
+// Source: ./src/app/(app)/sneakers/[slug]/page.tsx
+// Variable: sneakerNameQuery
+// Query: *[_type == "sneaker" && slug.current == $sneakerSlug][0]{    name,  }
+export type SneakerNameQueryResult = {
+  name: string | null;
+} | null;
+

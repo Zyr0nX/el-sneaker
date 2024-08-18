@@ -1,7 +1,7 @@
 import { groq } from "next-sanity";
 import React from "react";
 import { client } from "~/sanity/lib/client";
-import { FilterQueryResult } from "../../sanity.types";
+import { FilterLabelQueryResult, FilterQueryResult } from "../../sanity.types";
 import Filter from "./filter";
 
 export default async function FilterProvider() {
@@ -29,5 +29,15 @@ export default async function FilterProvider() {
     }
   );
 
-  return <Filter filter={filterList} />;
+  const filterLabelQuery = groq`*[_type == "filter"][0]{
+    brandLabel,
+    collectionLabel,
+    sizeLabel,
+    priceLabel,
+    resetLabel,
+    applyLabel
+  }`;
+  const filterLabel = await client.fetch<FilterLabelQueryResult>(filterLabelQuery);
+
+  return <Filter filter={filterList} filterLabel={filterLabel} />;
 }

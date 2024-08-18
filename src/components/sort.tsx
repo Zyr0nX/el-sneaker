@@ -6,15 +6,23 @@ import { Button } from "~/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "~/ui/dropdown-menu";
 import { cn } from "~/utils/shadcn";
 
-export function Sort() {
+export function Sort({
+  sortByLabel,
+  polularLabel,
+  priceAscLabel,
+  priceDescLabel,
+}: {
+  sortByLabel: string | null;
+  polularLabel: string | null;
+  priceAscLabel: string | null;
+  priceDescLabel: string | null;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -30,14 +38,14 @@ export function Sort() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="border border-neutral-100 rounded-lg px-4 py-2 outline-none">
-        <p className="text-sm">Sắp xếp theo</p>
+        <p className="text-sm">{sortByLabel}</p>
         <div className="flex gap-1 text-brand-500 items-center">
           <p className="font-semibold">
             {sort == "asc"
-              ? "Giá thấp đến cao"
+              ? priceAscLabel
               : sort == "desc"
-                ? "Giá cao đến thấp"
-                : "Phổ biến nhất"}
+                ? priceDescLabel
+                : polularLabel}
           </p>
           <ChevronDownIcon className="h-5 w-5" />
         </div>
@@ -57,7 +65,7 @@ export function Sort() {
                   : "hover:bg-brand-50"
               )}
             >
-              Phổ biến nhất
+              {polularLabel}
             </Button>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem asChild value="asc">
@@ -70,7 +78,7 @@ export function Sort() {
                   : "hover:bg-brand-50"
               )}
             >
-              Giá thấp đến cao
+              {priceAscLabel}
             </Button>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem asChild value="desc">
@@ -83,7 +91,7 @@ export function Sort() {
                   : "hover:bg-brand-50"
               )}
             >
-              Giá cao đến thấp
+              {priceDescLabel}
             </Button>
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>

@@ -225,12 +225,10 @@ const CarouselPrevious = React.forwardRef<
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
   return (
-    <Button
+    <button
       ref={ref}
-      variant={variant}
-      size={size}
       className={cn(
-        "absolute h-8 w-8 rounded-full",
+        "absolute h-8 w-8 rounded-full bg-neutral-100 flex justify-center items-center",
         orientation === "horizontal"
           ? "-left-12 top-1/2 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -242,7 +240,7 @@ const CarouselPrevious = React.forwardRef<
     >
       <ChevronLeftIcon className="h-6 w-6 text-neutral-50" />
       <span className="sr-only">Previous slide</span>
-    </Button>
+    </button>
   );
 });
 CarouselPrevious.displayName = "CarouselPrevious";
@@ -254,12 +252,10 @@ const CarouselNext = React.forwardRef<
   const { orientation, scrollNext, canScrollNext } = useCarousel();
 
   return (
-    <Button
+    <button
       ref={ref}
-      variant={variant}
-      size={size}
       className={cn(
-        "absolute h-8 w-8 rounded-full",
+        "absolute h-8 w-8 rounded-full bg-neutral-100 flex justify-center items-center",
         orientation === "horizontal"
           ? "-right-12 top-1/2 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -271,7 +267,7 @@ const CarouselNext = React.forwardRef<
     >
       <ChevronRightIcon className="h-6 w-6 text-neutral-50" />
       <span className="sr-only">Next slide</span>
-    </Button>
+    </button>
   );
 });
 
@@ -369,7 +365,7 @@ export const Thumbs = ({
         {images.map((image, index) => (
           <div
             key={index}
-            className={`flex-shrink-0 grow-0 basis-1/5 max-w-32 rounded-2xl overflow-hidden ${index == selectedIndex ? "outline-2 outline outline-brand-300 -outline-offset-2" : ""}`}
+            className={`flex-shrink-0 grow-0 basis-1/5 max-w-32 rounded-lg overflow-hidden ${index == selectedIndex ? "outline-2 outline outline-brand-300 -outline-offset-2" : ""}`}
             onClick={() => onThumbClick(index)}
           >
             <Image id={image.ref} alt="" className="object-cover w-fit" />
