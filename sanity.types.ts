@@ -494,6 +494,37 @@ export type SneakerQueryResult = {
     ref: string | null;
   }> | null;
 } | null;
+// Source: ./src/components/product-list-provider.tsx
+// Variable: sneakerListQueryAsc
+// Query: *[_type == "sneaker"     && (!defined($brands) || brand->slug.current in $brands)    && (!defined($collections) || collection->slug.current in $collections)    && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)    && (!defined($minPrice) || price >= $minPrice)    && (!defined($maxPrice) || price <= $maxPrice)    // && (!defined($lastAscs) || !defined($lastIdsAsc) || price > $lastAscs || (price == $lastAscs && _id > $lastIdsAsc))    ]|order(price asc)[$first...$last]{      _id,      "slug": slug.current,      name,      price,      "brand": brand->name,      "image": images[0].asset._ref    }
+export type SneakerListQueryAscResult = Array<{
+  _id: string;
+  slug: string | null;
+  name: string | null;
+  price: number | null;
+  brand: string | null;
+  image: string | null;
+}>;
+// Variable: sneakerListQueryDesc
+// Query: *[_type == "sneaker"     && (!defined($brands) || brand->slug.current in $brands)    && (!defined($collections) || collection->slug.current in $collections)    && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)    && (!defined($minPrice) || price >= $minPrice)    && (!defined($maxPrice) || price <= $maxPrice)    // && (!defined($lastDescs) || !defined($lastIdsDesc) || price > $lastDescs || (price == $lastDescs && _id > $lastIdsDesc))    ]|order(price desc)[$first...$last]{      _id,      "slug": slug.current,      name,      price,      "brand": brand->name,      "image": images[0].asset._ref    }
+export type SneakerListQueryDescResult = Array<{
+  _id: string;
+  slug: string | null;
+  name: string | null;
+  price: number | null;
+  brand: string | null;
+  image: string | null;
+}>;
+// Variable: sneakerListQueryPopular
+// Query: *[_type == "sneaker"     && (!defined($brands) || brand->slug.current in $brands)    && (!defined($collections) || collection->slug.current in $collections)    && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)    && (!defined($minPrice) || price >= $minPrice)    && (!defined($maxPrice) || price <= $maxPrice)    //maxPriceDO    ][$first...$last]{      _id,      "slug": slug.current,      name,      price,      "brand": brand->name,      "image": images[0].asset._ref    }
+export type SneakerListQueryPopularResult = Array<{
+  _id: string;
+  slug: string | null;
+  name: string | null;
+  price: number | null;
+  brand: string | null;
+  image: string | null;
+}>;
 // Source: ./src/components/trending.tsx
 // Variable: trendingQuery
 // Query: *[_type == "trending"][0]{    title,    viewAllLink,    'sneakers': sneakers[]->{      _id,      name,      price,      "slug":slug.current,      "brand":brand->name,      "image":images[0].asset._ref,    }}

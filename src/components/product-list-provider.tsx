@@ -1,7 +1,7 @@
 import { groq } from "next-sanity";
 import React from "react";
 import { client } from "~/sanity/lib/client";
-import { SneakerListQueryResult } from "../../sanity.types";
+import { SneakerListQueryAscResult, SneakerListQueryDescResult, SneakerListQueryPopularResult, SneakerQueryResult } from "../../sanity.types";
 import ProductList from "./product-list";
 import { cookies } from "next/headers";
 import { getCookie } from "cookies-next";
@@ -37,9 +37,7 @@ export default async function ProductListProvider({
     ? JSON.parse(getCookie("lastDescs", { cookies }) as string)
     : {};
 
-  const sneakerListQuery =
-    sort === "asc"
-      ? groq`*[_type == "sneaker" 
+  const sneakerListQueryAsc = groq`*[_type == "sneaker" 
     && (!defined($brands) || brand->slug.current in $brands)
     && (!defined($collections) || collection->slug.current in $collections)
     && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
@@ -54,8 +52,8 @@ export default async function ProductListProvider({
       "brand": brand->name,
       "image": images[0].asset._ref
     }`
-      : sort === "desc"
-        ? groq`*[_type == "sneaker" 
+
+  const sneakerListQueryDesc = groq`*[_type == "sneaker" 
     && (!defined($brands) || brand->slug.current in $brands)
     && (!defined($collections) || collection->slug.current in $collections)
     && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
@@ -69,8 +67,9 @@ export default async function ProductListProvider({
       price,
       "brand": brand->name,
       "image": images[0].asset._ref
-    }`
-        : groq`*[_type == "sneaker" 
+    }`;
+
+  const sneakerListQueryPopular = groq`*[_type == "sneaker" 
     && (!defined($brands) || brand->slug.current in $brands)
     && (!defined($collections) || collection->slug.current in $collections)
     && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
@@ -84,7 +83,14 @@ export default async function ProductListProvider({
       price,
       "brand": brand->name,
       "image": images[0].asset._ref
-    }`;
+    }`
+
+  const sneakerListQuery =
+    sort === "asc"
+      ? sneakerListQueryAsc
+      : sort === "desc"
+        ? sneakerListQueryDesc
+        : sneakerListQueryPopular;
 
   function findSkipPages(page: number, lastIdsAsc: any, lastAscs: any) {
     console.log(page);
@@ -109,7 +115,7 @@ export default async function ProductListProvider({
     return skipPages;
   }
 
-  const sneakerList = await client.fetch<SneakerListQueryResult>(
+  const sneakerList = await client.fetch<SneakerListQueryAscResult | SneakerListQueryDescResult | SneakerListQueryPopularResult>(
     sneakerListQuery,
     {
       brands: brands ? brands.split(",") : null,
@@ -176,7 +182,6 @@ export default async function ProductListProvider({
     },
     {
       next: { tags: ["sneaker"] },
-      cache: "no-store",
     }
   );
   return <ProductList products={sneakerList} />;
