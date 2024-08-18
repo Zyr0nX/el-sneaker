@@ -370,7 +370,6 @@ export default async function ProductDetail({
             </div>
           </div>
           <div className="flex flex-wrap gap-4">
-            {sneakerContent.}
             <div className="py-1.5 px-4 outline-1 outline font-semibold outline-brand-500 text-brand-500 rounded-full">
               36
             </div>
