@@ -6,20 +6,27 @@ import { beVietnamPro } from "~/utils/font/be-vietnam-pro";
 import Header from "~/components/header";
 import Footer from "~/components/footer";
 
+export const metadata: Metadata = {
+  title: "El.sneaker",
+  description: "Sneaker and stuff authentic 100%",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <ClientProviders>
-      <div
+    <html lang="en">
+      <body
         className={`text-neutral-900 ${gilroy.variable} ${beVietnamPro.className}`}
       >
-        <Header />
-        <main>{children}</main>
-        <Footer />
-      </div>
-    </ClientProviders>
+        <ClientProviders>
+            <Header />
+            <main>{children}</main>
+            <Footer />
+        </ClientProviders>
+      </body>
+    </html>
   );
 }

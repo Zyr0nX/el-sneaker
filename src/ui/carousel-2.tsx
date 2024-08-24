@@ -185,7 +185,6 @@ const CarouselContent = React.forwardRef<
         ref={ref}
         className={cn(
           "flex",
-          orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
           className
         )}
         {...props}
@@ -207,7 +206,6 @@ const CarouselItem = React.forwardRef<
       aria-roledescription="slide"
       className={cn(
         "min-w-0 shrink-0 grow-0 basis-full",
-        orientation === "horizontal" ? "pl-4" : "pt-4",
         className
       )}
       {...props}
@@ -365,7 +363,7 @@ export const Thumbs = ({
         {images.map((image, index) => (
           <div
             key={index}
-            className={`flex-shrink-0 grow-0 basis-1/5 max-w-32 rounded-lg overflow-hidden ${index == selectedIndex ? "outline-2 outline outline-brand-300 -outline-offset-2" : ""}`}
+            className={`flex-shrink-0 grow-0 basis-1/5 max-w-32 rounded-lg overflow-hidden cursor-pointer ${index == selectedIndex ? "outline-2 outline outline-brand-300 -outline-offset-2" : ""}`}
             onClick={() => onThumbClick(index)}
           >
             <Image id={image.ref} alt="" className="object-cover w-fit" />

@@ -22,6 +22,12 @@ import Zalo from "~/icons/zalo";
 import Gmail from "~/icons/gmail";
 import { cn } from "~/utils/shadcn";
 import { SizeGuide } from "./size-guide";
+import { urlFor } from "~/sanity/lib/image";
+import dynamic from "next/dynamic";
+
+const EasyZoomOnMove = dynamic(() => import("./EasyZoomOnMove"), {
+  ssr: false,
+});
 
 export default async function ProductDetail({
   sneakerSlug,
@@ -76,11 +82,26 @@ export default async function ProductDetail({
                 <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100" />
                 <CarouselContent>
                   {sneakerContent.images.map((image) => (
-                    <CarouselItem key={image.key}>
-                      <Image
-                        id={image.ref}
-                        alt=""
-                        className="object-cover w-fit rounded-2xl"
+                    <CarouselItem className="rounded-2xl overflow-hidden" key={image.key}>
+                      <EasyZoomOnMove
+                        mainImage={{
+                          src: urlFor(image.ref!)
+                            .auto("format")
+                            .fit("max")
+                            .quality(75)
+                            .url(),
+                          alt: "My Product",
+                        }}
+                        zoomImage={{
+                          src: urlFor(image.ref!)
+                            .auto("format")
+                            .fit("max")
+                            .quality(100)
+                            .url(),
+                          alt: "My Product Zoom",
+                        }}
+                        loadingIndicator={<></>}
+                        delayTimer={1000}
                       />
                     </CarouselItem>
                   ))}

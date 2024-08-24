@@ -20,8 +20,11 @@ export default async function Header() {
 
   if (!headerContent) return null;
   return (
-    <header className="bg-white h-[4.6875rem] flex justify-between px-[6.25rem] items-center">
-      <Link className="font-gilroy font-bold text-[2.5rem] text-neutral-900" href="/" >
+    <header className="bg-white h-[4.6875rem] flex justify-between px-[6.25rem] items-center shadow-[-8px_4px_20px_0px_#919EAB3D]">
+      <Link
+        className="font-gilroy font-bold text-[2.5rem] text-neutral-900"
+        href="/"
+      >
         {headerContent.logo && (
           <PortableText value={headerContent.logo} components={components} />
         )}
@@ -32,7 +35,11 @@ export default async function Header() {
             if (!link.url) return null;
 
             return (
-              <Link className="bg-brand-500 px-4 py-2.5 rounded-full text-neutral-50 font-semibold" key={link._key} href={link.url}>
+              <Link
+                className="bg-brand-500 px-4 py-2.5 rounded-full text-neutral-50 font-semibold"
+                key={link._key}
+                href={link.url}
+              >
                 {link.text}
               </Link>
             );
