@@ -23,8 +23,8 @@ export default function Gmail() {
         fill="#FFBC00"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M5.45553 8.72959L3.31836 4.21506L5.45553 1.63867L12.001 6.54775L18.5464 1.63867V8.72959L12.001 13.6387L5.45553 8.72959Z"
         fill="#FF4131"
       />

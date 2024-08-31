@@ -136,48 +136,51 @@ export default async function ProductDetail({
           </p>
           <ProductDetailPrice sizes={sneakerContent.sizes} price={price} />
         </div>
-        {sneakerContent.images && sneakerContent.images.length > 0 && (
-          <Carousel>
-            <div className="flex flex-col gap-6">
-              <div className="flex items-center justify-between gap-1 md:gap-4">
-                <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100 hidden md:block" />
-                <CarouselContent>
-                  {sneakerContent.images.map((image) => (
-                    <CarouselItem
-                      className="rounded-2xl overflow-hidden"
-                      key={image.key}
-                    >
-                      <EasyZoomOnMove
-                        mainImage={{
-                          src: urlFor(image.ref!)
-                            .auto("format")
-                            .fit("max")
-                            .quality(75)
-                            .url(),
-                          alt: "My Product",
-                        }}
-                        zoomImage={{
-                          src: urlFor(image.ref!)
-                            .auto("format")
-                            .fit("max")
-                            .quality(100)
-                            .url(),
-                          alt: "My Product Zoom",
-                        }}
-                        loadingIndicator={<></>}
-                        delayTimer={1000}
-                      />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
+        <div className="md:hidden">
+          {sneakerContent.images && sneakerContent.images.length > 0 && (
+            <Carousel>
+              <div className="flex flex-col gap-6">
+                <div className="flex items-center justify-between gap-1 md:gap-4">
+                  <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100 hidden md:block" />
+                  <CarouselContent>
+                    {sneakerContent.images.map((image) => (
+                      <CarouselItem
+                        className="rounded-2xl overflow-hidden"
+                        key={image.key}
+                      >
+                        <EasyZoomOnMove
+                          mainImage={{
+                            src: urlFor(image.ref!)
+                              .auto("format")
+                              .fit("max")
+                              .quality(75)
+                              .url(),
+                            alt: "My Product",
+                          }}
+                          zoomImage={{
+                            src: urlFor(image.ref!)
+                              .auto("format")
+                              .fit("max")
+                              .quality(100)
+                              .url(),
+                            alt: "My Product Zoom",
+                          }}
+                          loadingIndicator={<></>}
+                          delayTimer={1000}
+                        />
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
 
-                <CarouselNext className="static shrink-0 -translate-y-0  bg-neutral-100 hidden md:block" />
+                  <CarouselNext className="static shrink-0 -translate-y-0  bg-neutral-100 hidden md:block" />
+                </div>
+
+                <Thumbs images={sneakerContent.images} />
               </div>
+            </Carousel>
+          )}
+        </div>
 
-              <Thumbs images={sneakerContent.images} />
-            </div>
-          </Carousel>
-        )}
         <div className="flex flex-col gap-4">
           {sneakerDetail && (
             <div className="flex justify-between items-center">
@@ -214,7 +217,9 @@ export default async function ProductDetail({
         </div>
         {sneakerDetail && sneakerDetail.social && (
           <div className="flex flex-col gap-3">
-            <p className="font-medium md:text-lg">{sneakerDetail.contactLabel}</p>
+            <p className="font-medium md:text-lg">
+              {sneakerDetail.contactLabel}
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {sneakerDetail.social.map((social) => {
                 if (!social.link || !social.link.url) return null;

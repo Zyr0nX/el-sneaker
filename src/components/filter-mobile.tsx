@@ -22,8 +22,8 @@ export default function FilterMobile({
           <MixerHorizontalIcon />
         </Button>
       </SheetTrigger>
-      <SheetContent>
-        <Filter filter={filter} filterLabel={filterLabel} onApplyClick={() => setOpen(false)} />
+      <SheetContent forceMount>
+        <Filter filter={filter} filterLabel={filterLabel} onFormSubmit={() => setOpen(false)} />
       </SheetContent>
     </Sheet>
   );

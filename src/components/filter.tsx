@@ -41,11 +41,11 @@ const FormSchema = z.object({
 export default function Filter({
   filter,
   filterLabel,
-  onApplyClick,
+  onFormSubmit,
 }: {
   filter: FilterQueryResult;
   filterLabel: FilterLabelQueryResult;
-  onApplyClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onFormSubmit?: React.FormEventHandler<HTMLFormElement>;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -101,6 +101,7 @@ export default function Filter({
   }
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log("Here")
     const params = new URLSearchParams(searchParams.toString());
 
     if (data.brands.length > 0) {
@@ -142,7 +143,10 @@ export default function Filter({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={(e) => {
+        form.handleSubmit(onSubmit)(e)
+        onFormSubmit?.(e)
+      }} className="space-y-8">
         <Accordion type="multiple" className="w-full">
           <AccordionItem value="item-1" asChild>
             <FormItem>
@@ -474,7 +478,6 @@ export default function Filter({
             type="submit"
             size="sm"
             className="basis-full"
-            onClick={onApplyClick}
           >
             {filterLabel?.applyLabel}
           </Button>
