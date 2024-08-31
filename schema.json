@@ -1729,6 +1729,13 @@
           },
           "optional": true
         },
+        "price": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "number"
+          },
+          "optional": true
+        },
         "out_of_stock": {
           "type": "objectAttribute",
           "value": {

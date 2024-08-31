@@ -37,20 +37,23 @@ export default async function Footer() {
 
   if (!footerContent) return null;
   return (
-    <footer className="bg-neutral-900 pt-16 px-[6.25rem] pb-2.5 text-neutral-50 pr-10">
-      <div className="flex">
-        <div className="pt-10 border-y border-r border-neutral-300 basis-3/5 flex flex-col gap-6 pb-6">
-          <h2 className="font-gilroy font-extrabold text-[4rem] leading-none">
+    <footer className="bg-neutral-900 pt-4 md:pt-16 px-5 md:px-[6.25rem] pb-2.5 text-neutral-50 pr-10">
+      <div className="flex md:flex-row flex-col">
+        <div className="pt-4 md:pt-10 border-y border-r border-neutral-300 md:basis-3/5 flex flex-col md:gap-6 md:pb-6 pb-3 md:pr-10 pr-3">
+          <h2 className="font-gilroy font-extrabold text-2xl md:text-[4rem]">
             {footerContent.title}
           </h2>
-          <Link href="/sneakers" className="flex gap-2 items-center w-fit text-brand-500 font-semibold">
+          <Link
+            href="/sneakers"
+            className="mx-3 my-2 text-sm md:text-base flex gap-2 items-center w-fit text-brand-500 font-semibold"
+          >
             {footerContent.button?.text}
             <End />
           </Link>
         </div>
-        <div className="pt-10 pb-6 basis-2/5 border-y border-l border-neutral-300 pl-10 flex flex-col gap-4">
+        <div className="pt-4 md:pt-10 pb-3 md:pb-6 basis-2/5 border-y border-l border-neutral-300 md:pl-10 pl-3 flex flex-col gap-2 md:gap-4">
           <div>
-            <div className="font-gilroy font-bold text-[2.5rem]">
+            <div className="font-gilroy font-bold md:text-[2.4375rem] text-[1.8125rem]">
               {footerContent.logo && (
                 <PortableText
                   value={footerContent.logo}
@@ -60,12 +63,12 @@ export default async function Footer() {
             </div>
             <div>
               {footerContent.socialPlatform?.map((platform) => (
-                <p key={platform.title} className="py-2">
+                <p key={platform.title} className="py-2 text-sm md:text-base">
                   {platform.title}: {platform.link?.url}
                 </p>
               ))}
               {footerContent.additionalInformation?.map((info) => (
-                <p key={info} className="py-2">
+                <p key={info} className="py-2 text-sm md:text-base">
                   {info}
                 </p>
               ))}
@@ -73,30 +76,32 @@ export default async function Footer() {
           </div>
           {footerContent.socialPlatformIcon && (
             <div className="flex gap-4 py-2">
-              {footerContent.socialPlatformIcon.filter((icon) => icon.link !== null).map((icon) => {
-                if (!icon.link || !icon.link.url) return null;
-                return (
-                  <Link
-                    target="_blank"
-                    key={icon.link._type}
-                    href={icon.link.url}
-                  >
-                    {icon.socialPlatform == "facebook" ? (
-                      <FacebookWhite />
-                    ) : icon.socialPlatform == "instagram" ? (
-                      <InstagramWhite />
-                    ) : icon.socialPlatform == "website" ? (
-                      <WebsiteWhite />
-                    ) : null}
-                  </Link>
-                );
-              })}
+              {footerContent.socialPlatformIcon
+                .filter((icon) => icon.link !== null)
+                .map((icon) => {
+                  if (!icon.link || !icon.link.url) return null;
+                  return (
+                    <Link
+                      target="_blank"
+                      key={icon.link._type}
+                      href={icon.link.url}
+                    >
+                      {icon.socialPlatform == "facebook" ? (
+                        <FacebookWhite />
+                      ) : icon.socialPlatform == "instagram" ? (
+                        <InstagramWhite />
+                      ) : icon.socialPlatform == "website" ? (
+                        <WebsiteWhite />
+                      ) : null}
+                    </Link>
+                  );
+                })}
             </div>
           )}
         </div>
       </div>
       <div className="flex justify-center items-center">
-        <p className="py-4">Copyright EL.sneaker 2024 - All Rights Reserved</p>
+        <p className="py-4 text-xs md:text-base">Copyright EL.sneaker 2024 - All Rights Reserved</p>
       </div>
     </footer>
   );

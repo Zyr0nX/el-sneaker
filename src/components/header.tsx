@@ -20,9 +20,9 @@ export default async function Header() {
 
   if (!headerContent) return null;
   return (
-    <header className="bg-white h-[4.6875rem] flex justify-between px-[6.25rem] items-center shadow-[-8px_4px_20px_0px_#919EAB3D]">
+    <header className="bg-white py-3 flex justify-between px-6 md:px-[6.25rem] items-center shadow-[-8px_4px_20px_0px_#919EAB3D]">
       <Link
-        className="font-gilroy font-bold text-[2.5rem] text-neutral-900"
+        className="font-gilroy font-bold md:text-[2.4375rem] text-[1.8125rem] text-neutral-900"
         href="/"
       >
         {headerContent.logo && (

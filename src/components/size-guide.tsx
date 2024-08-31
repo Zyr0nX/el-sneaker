@@ -11,7 +11,7 @@ export function SizeGuide({ label, image }: { label: string | null; image: strin
       <DialogTrigger asChild>
         <Button className="gap-2" variant="text">
           <Tape />
-          <p className="text-neutral-900 underline font-semibold">{label}</p>
+          <p className="text-neutral-900 underline font-semibold text-sm md:text-base">{label}</p>
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-4xl">

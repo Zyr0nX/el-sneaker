@@ -3,8 +3,9 @@ import React from "react";
 import { client } from "~/sanity/lib/client";
 import { FilterLabelQueryResult, FilterQueryResult } from "../../sanity.types";
 import Filter from "./filter";
+import FilterMobile from "./filter-mobile";
 
-export default async function FilterProvider() {
+export default async function FilterProvider({ isMobile }: { isMobile: boolean }) {
   const filterQuery = groq`{
     "brands": *[_type == "brand" && _id in array::unique(*[_type == "sneaker"].brand._ref)]{
         _id,
@@ -39,5 +40,5 @@ export default async function FilterProvider() {
   }`;
   const filterLabel = await client.fetch<FilterLabelQueryResult>(filterLabelQuery);
 
-  return <Filter filter={filterList} filterLabel={filterLabel} />;
+  return isMobile ? <FilterMobile filter={filterList} filterLabel={filterLabel} /> : <Filter filter={filterList} filterLabel={filterLabel} />;
 }

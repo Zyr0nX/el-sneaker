@@ -1,5 +1,5 @@
 import ProductDetail from "~/components/product-detail";
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
 import { groq } from "next-sanity";
 import { client } from "~/sanity/lib/client";
 import { SneakerQueryResult } from "../../../../../sanity.types";
@@ -23,10 +23,11 @@ export async function generateMetadata(
   };
 }
 
-export default function PostIndex({ params }: { params: { slug: string } }) {
+export default function PostIndex({ params, searchParams }: { params: { slug: string }, searchParams: { size: number} }) {
+  console.log(searchParams.size)
   return (
     <>
-      <ProductDetail sneakerSlug={params.slug} />
+      <ProductDetail sneakerSlug={params.slug} sizeParam={searchParams.size} />
     </>
   );
 }

@@ -38,7 +38,15 @@ const FormSchema = z.object({
   maxPrice: z.number().nullable(),
 });
 
-export default function Filter({ filter, filterLabel }: { filter: FilterQueryResult, filterLabel: FilterLabelQueryResult }) {
+export default function Filter({
+  filter,
+  filterLabel,
+  onApplyClick,
+}: {
+  filter: FilterQueryResult;
+  filterLabel: FilterLabelQueryResult;
+  onApplyClick?: React.MouseEventHandler<HTMLButtonElement>;
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -48,9 +56,17 @@ export default function Filter({ filter, filterLabel }: { filter: FilterQueryRes
     defaultValues: {
       brands: searchParams.get("brands")?.split(",") || [],
       collections: searchParams.get("collections")?.split(",") || [],
-      sizes: searchParams.get("sizes")?.split(",")?.map((size) => Number(size)) || [],
-      minPrice: searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : null,
-      maxPrice: searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null,
+      sizes:
+        searchParams
+          .get("sizes")
+          ?.split(",")
+          ?.map((size) => Number(size)) || [],
+      minPrice: searchParams.get("minPrice")
+        ? Number(searchParams.get("minPrice"))
+        : null,
+      maxPrice: searchParams.get("maxPrice")
+        ? Number(searchParams.get("maxPrice"))
+        : null,
     },
   });
 
@@ -62,14 +78,11 @@ export default function Filter({ filter, filterLabel }: { filter: FilterQueryRes
   useEffect(() => {
     if (maxPrice === 1000000 && !minPrice) {
       setRadioValue("below-1000000");
-    }
-    else if (minPrice === 1000000 && maxPrice === 3000000) {
+    } else if (minPrice === 1000000 && maxPrice === 3000000) {
       setRadioValue("1000000-3000000");
-    }
-    else if (minPrice === 3000000 && !maxPrice) {
+    } else if (minPrice === 3000000 && !maxPrice) {
       setRadioValue("above-3000000");
-    }
-    else {
+    } else {
       setRadioValue("");
     }
   }, [minPrice, maxPrice]);
@@ -126,7 +139,6 @@ export default function Filter({ filter, filterLabel }: { filter: FilterQueryRes
       router.replace(pathname);
     }
   }
-
 
   return (
     <Form {...form}>
@@ -458,7 +470,12 @@ export default function Filter({ filter, filterLabel }: { filter: FilterQueryRes
           >
             {filterLabel?.resetLabel}
           </Button>
-          <Button type="submit" size="sm" className="basis-full">
+          <Button
+            type="submit"
+            size="sm"
+            className="basis-full"
+            onClick={onApplyClick}
+          >
             {filterLabel?.applyLabel}
           </Button>
         </div>

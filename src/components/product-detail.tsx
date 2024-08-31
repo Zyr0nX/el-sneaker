@@ -24,6 +24,8 @@ import { cn } from "~/utils/shadcn";
 import { SizeGuide } from "./size-guide";
 import { urlFor } from "~/sanity/lib/image";
 import dynamic from "next/dynamic";
+import ProductDetailSize from "./product-detail-size";
+import ProductDetailPrice from "./product-detail-price";
 
 const EasyZoomOnMove = dynamic(() => import("./EasyZoomOnMove"), {
   ssr: false,
@@ -31,15 +33,17 @@ const EasyZoomOnMove = dynamic(() => import("./EasyZoomOnMove"), {
 
 export default async function ProductDetail({
   sneakerSlug,
+  sizeParam,
 }: {
   sneakerSlug: string;
+  sizeParam: number;
 }) {
   const sneakerQuery = groq`*[_type == "sneaker" && slug.current == $sneakerSlug][0]{
     name,
     "brand": brand->name,
     "collection": collection->name,
     price,
-    "sizes": sizes[]{_key, size, out_of_stock},
+    "sizes": sizes[]{_key, size, price, out_of_stock},
     description,
     "images": images[]{
       "key": _key,
@@ -70,11 +74,14 @@ export default async function ProductDetail({
       title,
       link}
   }`;
+
   const sneakerDetail =
     await client.fetch<SneakerDetailQueryResult>(sneakerDetailQuery);
+
+  const price = sneakerContent.sizes?.find((s) => s.size === sizeParam && !s.out_of_stock)?.price ?? (sneakerContent.price ?? 0);
   return (
-    <div className="px-[6.25rem] py-11 flex gap-[4.5rem] w-full ">
-      <div className="max-w-full w-1/2">
+    <div className="px-5 py-5 md:px-[6.25rem] md:py-11 flex gap-[4.5rem] w-full">
+      <div className="max-w-full w-1/2 hidden md:block">
         {sneakerContent.images && sneakerContent.images.length > 0 && (
           <Carousel>
             <div className="flex flex-col gap-6">
@@ -82,7 +89,10 @@ export default async function ProductDetail({
                 <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100" />
                 <CarouselContent>
                   {sneakerContent.images.map((image) => (
-                    <CarouselItem className="rounded-2xl overflow-hidden" key={image.key}>
+                    <CarouselItem
+                      className="rounded-2xl overflow-hidden"
+                      key={image.key}
+                    >
                       <EasyZoomOnMove
                         mainImage={{
                           src: urlFor(image.ref!)
@@ -116,19 +126,61 @@ export default async function ProductDetail({
         )}
       </div>
 
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-3 md:gap-8">
         <div className="flex flex-col gap-1">
-          <h2 className="font-semibold text-[2rem]">{sneakerContent.name}</h2>
-          <p className="font-medium text-lg text-neutral-400">
+          <h2 className="font-semibold text-lg md:text-[2rem]">
+            {sneakerContent.name}
+          </h2>
+          <p className="font-medium text-sm md:text-lg text-neutral-400">
             {sneakerContent.brand}
           </p>
-          <p className="font-semibold text-2xl text-brand-500">
-            {sneakerContent.price?.toLocaleString("vi-VN")}đ
-          </p>
+          <ProductDetailPrice sizes={sneakerContent.sizes} price={price} />
         </div>
+        {sneakerContent.images && sneakerContent.images.length > 0 && (
+          <Carousel>
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center justify-between gap-1 md:gap-4">
+                <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100 hidden md:block" />
+                <CarouselContent>
+                  {sneakerContent.images.map((image) => (
+                    <CarouselItem
+                      className="rounded-2xl overflow-hidden"
+                      key={image.key}
+                    >
+                      <EasyZoomOnMove
+                        mainImage={{
+                          src: urlFor(image.ref!)
+                            .auto("format")
+                            .fit("max")
+                            .quality(75)
+                            .url(),
+                          alt: "My Product",
+                        }}
+                        zoomImage={{
+                          src: urlFor(image.ref!)
+                            .auto("format")
+                            .fit("max")
+                            .quality(100)
+                            .url(),
+                          alt: "My Product Zoom",
+                        }}
+                        loadingIndicator={<></>}
+                        delayTimer={1000}
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+
+                <CarouselNext className="static shrink-0 -translate-y-0  bg-neutral-100 hidden md:block" />
+              </div>
+
+              <Thumbs images={sneakerContent.images} />
+            </div>
+          </Carousel>
+        )}
         <div className="flex flex-col gap-4">
           {sneakerDetail && (
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <p className="font-medium">{sneakerDetail?.sizeLabel}</p>
               <SizeGuide
                 label={sneakerDetail.sizeGuideLabel}
@@ -138,32 +190,20 @@ export default async function ProductDetail({
           )}
 
           {sneakerContent.sizes && sneakerContent.sizes.length > 0 && (
-            <div className="flex flex-wrap gap-4">
-              {sneakerContent.sizes.map((size) => {
-                return (
-                  <div
-                    key={size._key}
-                    className={cn(
-                      "py-1.5 px-4 outline-1 outline font-semibold rounded-full",
-                      size.out_of_stock
-                        ? "bg-neutral-100 border-neutral-200 text-neutral-300"
-                        : "border-brand-500 text-brand-500"
-                    )}
-                  >
-                    {size.size}
-                  </div>
-                );
-              })}
-            </div>
+            <ProductDetailSize
+              sizes={sneakerContent.sizes
+                .map((size) => size.size)
+                .filter((size) => size !== null)}
+            />
           )}
 
           <div className="flex flex-col gap-2">
-            <div className="flex gap-2.5 text-lg">
+            <div className="flex gap-2.5 md:text-lg">
               <p className="font-medium">{sneakerDetail?.skuLabel}</p>
               <p className="font-light">{sneakerContent.sku}</p>
             </div>
             {sneakerContent.content && (
-              <div className="list-disc">
+              <div className="list-disc text-sm md:text-base">
                 <PortableText
                   value={sneakerContent.content}
                   components={components}
@@ -174,8 +214,8 @@ export default async function ProductDetail({
         </div>
         {sneakerDetail && sneakerDetail.social && (
           <div className="flex flex-col gap-3">
-            <p className="font-medium text-lg">{sneakerDetail.contactLabel}</p>
-            <div className="grid grid-cols-2 gap-3">
+            <p className="font-medium md:text-lg">{sneakerDetail.contactLabel}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {sneakerDetail.social.map((social) => {
                 if (!social.link || !social.link.url) return null;
                 return (

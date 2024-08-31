@@ -363,7 +363,7 @@ export const Thumbs = ({
         {images.map((image, index) => (
           <div
             key={index}
-            className={`flex-shrink-0 grow-0 basis-1/5 max-w-32 rounded-lg overflow-hidden cursor-pointer ${index == selectedIndex ? "outline-2 outline outline-brand-300 -outline-offset-2" : ""}`}
+            className={`flex-shrink-0 grow-0 basis-2/5 md:basis-1/5 max-w-32 rounded-lg overflow-hidden cursor-pointer ${index == selectedIndex ? "outline-2 outline outline-brand-300 -outline-offset-2" : ""}`}
             onClick={() => onThumbClick(index)}
           >
             <Image id={image.ref} alt="" className="object-cover w-fit" />

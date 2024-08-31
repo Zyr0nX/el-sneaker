@@ -11,6 +11,11 @@ export const sizeType = defineType({
       type: 'number',
     }),
     defineField({
+      name: 'price',
+      title: 'Price',
+      type: 'number',
+    }),
+    defineField({
       name: 'out_of_stock',
       title: 'Out of Stock',
       type: 'boolean',

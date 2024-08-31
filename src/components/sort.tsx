@@ -38,7 +38,7 @@ export function Sort({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="border border-neutral-100 rounded-lg px-4 py-2 outline-none">
-        <p className="text-sm">{sortByLabel}</p>
+        <p className="text-sm hidden md:block">{sortByLabel}</p>
         <div className="flex gap-1 text-brand-500 items-center">
           <p className="font-semibold">
             {sort == "asc"
