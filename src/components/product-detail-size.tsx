@@ -12,11 +12,7 @@ export default function ProductDetailSize({ sizes }: { sizes: number[] }) {
     <div className="flex gap-4 flex-wrap">
       {sizes.map((size) => (
         <Button
-        //   className={cn(
-        //     "hover:border-brand-100",
-        //     Number(searchParams.get("size")) === size &&
-        //       "bg-brand-500 text-neutral-50"
-        //   )}
+          className='px-5 py-1.5'
           key={size}
           variant={Number(searchParams.get("size")) === size ? "primary" : "secondary"}
           onClick={() => {

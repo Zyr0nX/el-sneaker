@@ -27,7 +27,7 @@ export default async function Trending() {
   );
   if (!trendingContent) return null;
   return (
-    <div className="md:py-11 py-5 px-5 md:px-[6.26rem] flex flex-col gap-8">
+    <div className="md:py-11 py-5 px-5 md:px-[6.26rem] flex flex-col gap-2 md:gap-8">
       <div className="flex justify-between items-center">
         <h2 className="font-bold md:text-[2.5rem]">{trendingContent.title}</h2>
         {trendingContent.viewAllLink && (
