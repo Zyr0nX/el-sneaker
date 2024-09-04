@@ -13,6 +13,7 @@ import {
 import { Button } from "~/ui/button";
 import Tape from "~/icons/tape";
 import { Image } from "~/utils/sanity/image";
+import { ScrollArea } from "~/ui/scroll-area";
 
 export function SizeGuide({
   label,
@@ -41,11 +42,13 @@ export function SizeGuide({
         <DialogHeader>
           <DialogTitle>{label}</DialogTitle>
         </DialogHeader>
-        <div className="px-8 py-6 flex flex-col gap-4">
-          {image.map(({ key, ref }) => (
-            <Image key={key} id={ref} alt="" className="w-full" />
-          ))}
-        </div>
+        <ScrollArea className="max-h-[calc(100vh-5rem)]">
+          <div className="px-8 py-6 flex flex-col gap-4">
+            {image.map(({ key, ref }) => (
+              <Image key={key} id={ref} alt="" className="w-full" />
+            ))}
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
