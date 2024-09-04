@@ -65,7 +65,10 @@ export default async function ProductDetail({
   const sneakerDetailQuery = groq`*[_type == "sneakerDetail"][0]{
     sizeLabel,
     sizeGuideLabel,
-    "sizeGuideImage": sizeGuideImage.asset._ref,
+    "sizeGuideImages": sizeGuideImages[]{
+      "key": _key,
+      "ref": asset._ref
+    },
     skuLabel,
     contactLabel,
     social[]->{
@@ -131,8 +134,11 @@ export default async function ProductDetail({
           <h2 className="font-semibold text-lg md:text-[2rem]">
             {sneakerContent.name}
           </h2>
-          <p className="font-medium text-sm md:text-lg text-neutral-400">
+          <p className="font-medium text-sm md:text-xl">
             {sneakerContent.brand}
+          </p>
+          <p className="font-bold text-xs md:text-lg text-neutral-400">
+            {sneakerContent.collection}
           </p>
           <ProductDetailPrice sizes={sneakerContent.sizes} price={price} />
         </div>
@@ -187,7 +193,7 @@ export default async function ProductDetail({
               <p className="font-medium">{sneakerDetail?.sizeLabel}</p>
               <SizeGuide
                 label={sneakerDetail.sizeGuideLabel}
-                image={sneakerDetail.sizeGuideImage}
+                image={sneakerDetail.sizeGuideImages}
               />
             </div>
           )}

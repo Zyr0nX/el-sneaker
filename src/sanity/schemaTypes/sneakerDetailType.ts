@@ -16,9 +16,14 @@ export const sneakerDetailType = defineType({
       type: "string",
     }),
     defineField({
-      name: "sizeGuideImage",
-      title: "Size Guide Image",
-      type: "image",
+      name: "sizeGuideImages",
+      title: "Size Guide Images",
+      type: "array",
+      of: [
+        {
+          type: "image",
+        },
+      ],
     }),
     defineField({
       name: "skuLabel",

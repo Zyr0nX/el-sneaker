@@ -76,7 +76,7 @@ export type SneakerDetail = {
   _rev: string;
   sizeLabel?: string;
   sizeGuideLabel?: string;
-  sizeGuideImage?: {
+  sizeGuideImages?: Array<{
     asset?: {
       _ref: string;
       _type: "reference";
@@ -86,7 +86,8 @@ export type SneakerDetail = {
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
     _type: "image";
-  };
+    _key: string;
+  }>;
   skuLabel?: string;
   contactLabel?: string;
   social?: Array<{
@@ -606,11 +607,14 @@ export type SneakerQueryResult = {
   }> | null;
 } | null;
 // Variable: sneakerDetailQuery
-// Query: *[_type == "sneakerDetail"][0]{    sizeLabel,    sizeGuideLabel,    "sizeGuideImage": sizeGuideImage.asset._ref,    skuLabel,    contactLabel,    social[]->{      _id,      socialPlatform,      title,      link}  }
+// Query: *[_type == "sneakerDetail"][0]{    sizeLabel,    sizeGuideLabel,    "sizeGuideImages": sizeGuideImages[]{      "key": _key,      "ref": asset._ref    },    skuLabel,    contactLabel,    social[]->{      _id,      socialPlatform,      title,      link}  }
 export type SneakerDetailQueryResult = {
   sizeLabel: string | null;
   sizeGuideLabel: string | null;
-  sizeGuideImage: string | null;
+  sizeGuideImages: Array<{
+    key: string;
+    ref: string | null;
+  }> | null;
   skuLabel: string | null;
   contactLabel: string | null;
   social: Array<{
@@ -698,7 +702,7 @@ declare module "@sanity/client" {
     "count(*[_type == \"sneaker\" \n      && (!defined($brands) || brand->slug.current in $brands)\n      && (!defined($collections) || collection->slug.current in $collections)\n      && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)\n      && (!defined($minPrice) || price >= $minPrice)\n      && (!defined($maxPrice) || price <= $maxPrice)\n    ])": ProductCountQueryResult;
     "*[_type == \"sneakerCount\"][0]{\n    countLabel\n  }": SneakerCountQueryResult;
     "*[_type == \"sneaker\" && slug.current == $sneakerSlug][0]{\n    name,\n    \"brand\": brand->name,\n    \"collection\": collection->name,\n    price,\n    \"sizes\": sizes[]{_key, size, price, out_of_stock},\n    description,\n    \"images\": images[]{\n      \"key\": _key,\n      \"ref\": asset._ref\n    },\n    sku,\n    content,\n  }": SneakerQueryResult;
-    "*[_type == \"sneakerDetail\"][0]{\n    sizeLabel,\n    sizeGuideLabel,\n    \"sizeGuideImage\": sizeGuideImage.asset._ref,\n    skuLabel,\n    contactLabel,\n    social[]->{\n      _id,\n      socialPlatform,\n      title,\n      link}\n  }": SneakerDetailQueryResult;
+    "*[_type == \"sneakerDetail\"][0]{\n    sizeLabel,\n    sizeGuideLabel,\n    \"sizeGuideImages\": sizeGuideImages[]{\n      \"key\": _key,\n      \"ref\": asset._ref\n    },\n    skuLabel,\n    contactLabel,\n    social[]->{\n      _id,\n      socialPlatform,\n      title,\n      link}\n  }": SneakerDetailQueryResult;
     "*[_type == \"sneaker\" \n    && (!defined($brands) || brand->slug.current in $brands)\n    && (!defined($collections) || collection->slug.current in $collections)\n    && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)\n    && (!defined($minPrice) || price >= $minPrice)\n    && (!defined($maxPrice) || price <= $maxPrice)\n    // && (!defined($lastAscs) || !defined($lastIdsAsc) || price > $lastAscs || (price == $lastAscs && _id > $lastIdsAsc))\n    ]|order(price asc)[$first...$last]{\n      _id,\n      \"slug\": slug.current,\n      name,\n      price,\n      \"brand\": brand->name,\n      \"image\": images[0].asset._ref\n    }": SneakerListQueryAscResult;
     "*[_type == \"sneaker\" \n    && (!defined($brands) || brand->slug.current in $brands)\n    && (!defined($collections) || collection->slug.current in $collections)\n    && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)\n    && (!defined($minPrice) || price >= $minPrice)\n    && (!defined($maxPrice) || price <= $maxPrice)\n    // && (!defined($lastDescs) || !defined($lastIdsDesc) || price > $lastDescs || (price == $lastDescs && _id > $lastIdsDesc))\n    ]|order(price desc)[$first...$last]{\n      _id,\n      \"slug\": slug.current,\n      name,\n      price,\n      \"brand\": brand->name,\n      \"image\": images[0].asset._ref\n    }": SneakerListQueryDescResult;
     "*[_type == \"sneaker\" \n    && (!defined($brands) || brand->slug.current in $brands)\n    && (!defined($collections) || collection->slug.current in $collections)\n    && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)\n    && (!defined($minPrice) || price >= $minPrice)\n    && (!defined($maxPrice) || price <= $maxPrice)\n    //maxPriceDO\n    ][$first...$last]{\n      _id,\n      \"slug\": slug.current,\n      name,\n      price,\n      \"brand\": brand->name,\n      \"image\": images[0].asset._ref\n    }": SneakerListQueryPopularResult;

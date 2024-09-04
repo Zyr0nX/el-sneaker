@@ -40,7 +40,7 @@ export default async function Footer() {
     <footer className="bg-neutral-900 pt-4 md:pt-16 px-5 md:px-[6.25rem] pb-2.5 text-neutral-50 pr-10">
       <div className="flex md:flex-row flex-col">
         <div className="pt-4 md:pt-10 border-y border-r border-neutral-300 md:basis-3/5 flex flex-col md:gap-6 md:pb-6 pb-3 md:pr-10 pr-3">
-          <h2 className="font-gilroy font-extrabold text-2xl md:text-[4rem]">
+          <h2 className="font-gilroy font-extrabold text-2xl md:text-[4rem] leading-none">
             {footerContent.title}
           </h2>
           <Link
