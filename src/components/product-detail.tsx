@@ -131,13 +131,13 @@ export default async function ProductDetail({
 
       <div className="flex flex-col gap-3 md:gap-8">
         <div className="flex flex-col gap-1">
-          <h2 className="font-semibold text-lg md:text-[2rem]">
+          <h2 className="font-semibold text-lg md:text-[2rem] leading-[2.75rem]">
             {sneakerContent.name}
           </h2>
           <p className="font-medium text-sm md:text-xl">
             {sneakerContent.brand}
           </p>
-          <p className="font-bold text-xs md:text-lg text-neutral-400">
+          <p className="font-medium text-xs md:text-lg text-neutral-400">
             {sneakerContent.collection}
           </p>
           <ProductDetailPrice sizes={sneakerContent.sizes} price={price} />
@@ -205,21 +205,20 @@ export default async function ProductDetail({
                 .filter((size) => size !== null)}
             />
           )}
-
-          <div className="flex flex-col gap-2">
-            <div className="flex gap-2.5 md:text-lg">
-              <p className="font-medium">{sneakerDetail?.skuLabel}</p>
-              <p className="font-light">{sneakerContent.sku}</p>
-            </div>
-            {sneakerContent.content && (
-              <div className="list-disc text-sm md:text-base">
-                <PortableText
-                  value={sneakerContent.content}
-                  components={components}
-                />
-              </div>
-            )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2.5 md:text-lg">
+            <p className="font-medium">{sneakerDetail?.skuLabel}</p>
+            <p className="font-light">{sneakerContent.sku}</p>
           </div>
+          {sneakerContent.content && (
+            <div className="list-disc text-sm md:text-base">
+              <PortableText
+                value={sneakerContent.content}
+                components={components}
+              />
+            </div>
+          )}
         </div>
         {sneakerDetail && sneakerDetail.social && (
           <div className="flex flex-col gap-3">

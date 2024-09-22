@@ -12,7 +12,7 @@ export default function ProductDetailSize({ sizes }: { sizes: number[] }) {
     <div className="flex gap-4 flex-wrap">
       {sizes.map((size) => (
         <Button
-          className='px-5 py-1.5'
+          className='px-5 py-1.5 border-[2px] font-semibold'
           key={size}
           variant={Number(searchParams.get("size")) === size ? "primary" : "secondary"}
           onClick={() => {

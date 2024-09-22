@@ -9,11 +9,12 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-brand-500 text-neutral-50 hover:bg-brand-300",
+        primary:
+          "bg-brand-500 text-neutral-50 hover:bg-brand-300 border-brand-500",
         secondary:
           "bg-white border border-brand-500 text-brand-500 hover:bg-brand-100",
         ghost: "bg-transparent hover:bg-brand-100",
-        text: "text-brand-500"
+        text: "text-brand-500",
       },
       size: {
         sm: "text-sm py-1.5 px-3",

@@ -11,6 +11,7 @@ import { cn } from "~/utils/shadcn";
 import { Button } from "~/ui/button";
 import Autoplay from "~/components/Autoplay";
 import { Image } from "~/utils/sanity/image";
+import { ScrollArea } from "./scroll-area";
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -135,7 +136,7 @@ const Carousel = React.forwardRef<
           scrollPrev,
           scrollNext,
           canScrollPrev,
-          canScrollNext
+          canScrollNext,
         }}
       >
         <div
@@ -181,14 +182,7 @@ const CarouselContent = React.forwardRef<
 
   return (
     <div ref={carouselRef} className="overflow-hidden">
-      <div
-        ref={ref}
-        className={cn(
-          "flex",
-          className
-        )}
-        {...props}
-      />
+      <div ref={ref} className={cn("flex", className)} {...props} />
     </div>
   );
 });
@@ -204,10 +198,7 @@ const CarouselItem = React.forwardRef<
       ref={ref}
       role="group"
       aria-roledescription="slide"
-      className={cn(
-        "min-w-0 shrink-0 grow-0 basis-full",
-        className
-      )}
+      className={cn("min-w-0 shrink-0 grow-0 basis-full", className)}
       {...props}
     >
       {children}
@@ -373,7 +364,6 @@ export const Thumbs = ({
     </div>
   );
 };
-
 
 export {
   type CarouselApi,

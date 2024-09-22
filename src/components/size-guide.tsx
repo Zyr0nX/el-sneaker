@@ -31,7 +31,7 @@ export function SizeGuide({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="gap-2" variant="text">
+        <Button className="gap-2 p-0" variant="text">
           <Tape />
           <p className="text-neutral-900 underline font-semibold text-sm md:text-base">
             {label}
@@ -42,12 +42,10 @@ export function SizeGuide({
         <DialogHeader>
           <DialogTitle>{label}</DialogTitle>
         </DialogHeader>
-        <ScrollArea className="max-h-[calc(100vh-5rem)]">
-          <div className="px-8 py-6 flex flex-col gap-4">
-            {image.map(({ key, ref }) => (
-              <Image key={key} id={ref} alt="" className="w-full" />
-            ))}
-          </div>
+        <ScrollArea className="max-h-[calc(100vh-5rem)] px-8 py-6 flex flex-col gap-4">
+          {image.map(({ key, ref }) => (
+            <Image key={key} id={ref} alt="" className="w-full" />
+          ))}
         </ScrollArea>
       </DialogContent>
     </Dialog>
