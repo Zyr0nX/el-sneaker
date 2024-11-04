@@ -37,6 +37,9 @@ export default async function ProductCount({
       collections: collections ? collections.split(",") : null,
       minPrice: minPrice || null,
       maxPrice: maxPrice || null,
+    },
+    {
+      next: { tags: ["sneaker"] }
     }
   );
 

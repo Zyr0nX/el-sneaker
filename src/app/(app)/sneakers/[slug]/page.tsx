@@ -14,7 +14,7 @@ export async function generateMetadata(
     sneakerNameQuery,
     { sneakerSlug: params.slug },
     {
-      next: { tags: ["sneaker", params.slug] },
+      next: { tags: ["sneaker"] },
     }
   );
 
