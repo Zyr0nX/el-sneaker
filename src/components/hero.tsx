@@ -32,7 +32,7 @@ export default async function Banner() {
       }}
     >
       <CarouselContent>
-        {bannerContent.images.map((image) => (
+        {bannerContent.images.filter((image) => image.ref).map((image) => (
           <CarouselItem key={image._key}>
             <Image
               id={image.ref}
