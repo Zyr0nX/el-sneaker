@@ -21,7 +21,7 @@ export default function ProductCard({
       href={`/sneakers/${slug}`}
       className="flex flex-col gap-2 rounded-2xl overflow-hidden hover:outline-brand-300 hover:outline"
     >
-      <div>
+      <div title={name ?? undefined}>
         {image && (
           <Image
             id={image}
