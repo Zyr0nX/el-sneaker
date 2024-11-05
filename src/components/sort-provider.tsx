@@ -11,7 +11,9 @@ export default async function SortProvider() {
         priceAscLabel,
         priceDescLabel
   }`;
-  const sneakerCount = await client.fetch<SortQueryResult>(sortQuery);
+  const sneakerCount = await client.fetch<SortQueryResult>(sortQuery, {}, {
+    next: { tags: ["sort"] },
+  });
   
   if (!sneakerCount) return null;
   return (
