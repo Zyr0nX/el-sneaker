@@ -31,7 +31,7 @@ export default async function Footer() {
     footerQuery,
     {},
     {
-      next: { tags: ["footer"] },
+      next: { tags: ["footer", "social"] },
     }
   );
 
