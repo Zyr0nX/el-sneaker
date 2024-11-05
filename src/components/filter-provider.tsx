@@ -26,7 +26,7 @@ export default async function FilterProvider({ isMobile }: { isMobile: boolean }
     filterQuery,
     {},
     {
-      next: { tags: ["filter"] },
+      next: { tags: ["brand", "collection", "sneaker"] },
     }
   );
 

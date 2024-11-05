@@ -351,7 +351,7 @@ export const Thumbs = ({
   return (
     <div className="overflow-hidden" ref={emblaThumbsRef}>
       <div className="flex gap-4">
-        {images.map((image, index) => (
+        {images.filter((image) => image.ref).map((image, index) => (
           <div
             key={index}
             className={`flex-shrink-0 grow-0 basis-2/5 md:basis-1/5 max-w-32 rounded-lg overflow-hidden cursor-pointer ${index == selectedIndex ? "outline-2 outline outline-brand-300 -outline-offset-2" : ""}`}

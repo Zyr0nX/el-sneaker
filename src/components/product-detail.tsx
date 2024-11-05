@@ -79,7 +79,9 @@ export default async function ProductDetail({
   }`;
 
   const sneakerDetail =
-    await client.fetch<SneakerDetailQueryResult>(sneakerDetailQuery);
+    await client.fetch<SneakerDetailQueryResult>(sneakerDetailQuery, {}, {
+      next: { tags: ["sneakerDetail"] },
+    });
 
   const price = sneakerContent.sizes?.find((s) => s.size === sizeParam && !s.out_of_stock)?.price ?? (sneakerContent.price ?? 0);
   return (

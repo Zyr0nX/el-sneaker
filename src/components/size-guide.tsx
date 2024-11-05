@@ -43,7 +43,7 @@ export function SizeGuide({
           <DialogTitle>{label}</DialogTitle>
         </DialogHeader>
         <ScrollArea className="max-h-[calc(100vh-5rem)] px-8 py-6 flex flex-col gap-4">
-          {image.map(({ key, ref }) => (
+          {image.filter((image) => image.ref).map(({ key, ref }) => (
             <Image key={key} id={ref} alt="" className="w-full" />
           ))}
         </ScrollArea>

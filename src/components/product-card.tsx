@@ -22,11 +22,14 @@ export default function ProductCard({
       className="flex flex-col gap-2 rounded-2xl overflow-hidden hover:outline-brand-300 hover:outline"
     >
       <div>
-        <Image
-          id={image}
-          alt={""}
-          className="w-full aspect-square object-cover"
-        />
+        {image && (
+          <Image
+            id={image}
+            alt={""}
+            className="w-full aspect-square object-cover"
+          />
+        )}
+
         <div className="py-4 px-3 flex flex-col gap-1">
           <h6 className="font-medium text-lg truncate">{name}</h6>
           <div className="flex flex-col gap-1">
