@@ -18,7 +18,7 @@ export default function ProductCard({
   return (
     <Link
       variant="link"
-      href={`/sneakers/${slug}`}
+      href={`/sneakers/${encodeURIComponent(slug ?? "")}`}
       className="flex flex-col gap-2 rounded-2xl overflow-hidden hover:outline-brand-300 hover:outline"
     >
       <div title={name ?? undefined}>

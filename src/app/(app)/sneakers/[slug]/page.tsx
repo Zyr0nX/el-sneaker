@@ -24,7 +24,6 @@ export async function generateMetadata(
 }
 
 export default function PostIndex({ params, searchParams }: { params: { slug: string }, searchParams: { size: number} }) {
-  console.log(searchParams.size)
   return (
     <>
       <ProductDetail sneakerSlug={params.slug} sizeParam={searchParams.size} />

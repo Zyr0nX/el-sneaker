@@ -54,12 +54,12 @@ export default async function ProductDetail({
   }`;
   const sneakerContent = await client.fetch<SneakerQueryResult>(
     sneakerQuery,
-    { sneakerSlug },
+    { sneakerSlug: decodeURIComponent(sneakerSlug) },
     {
-      next: { tags: ["sneaker", sneakerSlug] },
+      next: { tags: ["sneaker"] },
     }
   );
-
+  console.log(sneakerContent);
   if (!sneakerContent) return null;
 
   const sneakerDetailQuery = groq`*[_type == "sneakerDetail"][0]{
