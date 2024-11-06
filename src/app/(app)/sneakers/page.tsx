@@ -22,17 +22,6 @@ export default async function PostIndex({
     page?: string;
   };
 }) {
-  console.log(
-    JSON.stringify({
-      brands: searchParams.brands,
-      sizes: searchParams.sizes,
-      collections: searchParams.collections,
-      from: searchParams.minPrice,
-      to: searchParams.maxPrice,
-      sort: searchParams.sort,
-      page: searchParams.page,
-    })
-  );
   return (
     <div className="px-5 py-5 md:py-11 md:px-[6.25rem] flex flex-col gap-8">
       <h2 className="font-bold text-[2.5rem]">Danh mục sản phẩm</h2>

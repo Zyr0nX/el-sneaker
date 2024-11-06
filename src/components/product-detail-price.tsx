@@ -18,7 +18,6 @@ export default function ProductDetailPrice({
 }) {
   const searchParams = useSearchParams();
   const size = searchParams.get("size");
-  console.log(sizes?.find((s) => s.size === Number(size) && !s.out_of_stock)?.price);
 
   return (
     <p className="font-semibold md:text-2xl text-brand-500">

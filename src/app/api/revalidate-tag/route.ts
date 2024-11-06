@@ -7,7 +7,6 @@ type WebhookPayload = {
 };
 
 export async function POST(req: NextRequest) {
-  console.log(req);
   try {
     if (!process.env.SANITY_REVALIDATE_SECRET) {
       return new Response(

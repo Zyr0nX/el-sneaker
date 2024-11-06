@@ -43,7 +43,6 @@ export default async function ProductListProvider({
     && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
     && (!defined($minPrice) || price >= $minPrice)
     && (!defined($maxPrice) || price <= $maxPrice)
-    // && (!defined($lastAscs) || !defined($lastIdsAsc) || price > $lastAscs || (price == $lastAscs && _id > $lastIdsAsc))
     ]|order(price asc)[$first...$last]{
       _id,
       "slug": slug.current,
@@ -59,7 +58,6 @@ export default async function ProductListProvider({
     && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
     && (!defined($minPrice) || price >= $minPrice)
     && (!defined($maxPrice) || price <= $maxPrice)
-    // && (!defined($lastDescs) || !defined($lastIdsDesc) || price > $lastDescs || (price == $lastDescs && _id > $lastIdsDesc))
     ]|order(price desc)[$first...$last]{
       _id,
       "slug": slug.current,
@@ -75,7 +73,6 @@ export default async function ProductListProvider({
     && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
     && (!defined($minPrice) || price >= $minPrice)
     && (!defined($maxPrice) || price <= $maxPrice)
-    //maxPriceDO
     ][$first...$last]{
       _id,
       "slug": slug.current,
@@ -91,29 +88,6 @@ export default async function ProductListProvider({
       : sort === "desc"
         ? sneakerListQueryDesc
         : sneakerListQueryPopular;
-
-  function findSkipPages(page: number, lastIdsAsc: any, lastAscs: any) {
-    console.log(page);
-    const pageNum = Number(page);
-    const lastIdsAscKeys = Object.keys(lastIdsAsc).map(Number);
-    const lastAscsKeys = Object.keys(lastAscs).map(Number);
-    const commonKeys = lastIdsAscKeys
-      .filter((key) => lastAscsKeys.includes(key))
-      .sort((a, b) => a - b);
-
-    let closestLesserPage = 0;
-
-    for (let i = 0; i < commonKeys.length; i++) {
-      if (commonKeys[i] < pageNum) {
-        closestLesserPage = commonKeys[i];
-      } else {
-        break;
-      }
-    }
-
-    const skipPages = pageNum - closestLesserPage;
-    return skipPages;
-  }
 
   const sneakerList = await client.fetch<
     | SneakerListQueryAscResult
@@ -153,35 +127,8 @@ export default async function ProductListProvider({
           : null
         : null,
       first:
-        // sort == "asc"
-        //   ? lastAscs[Number(page) - 1] && lastIdsAsc[Number(page) - 1]
-        //     ? 0
-        //     : Number(page) - 1
-        //       ? findSkipPages(Number(page) - 1, lastIdsAsc, lastAscs) * 12
-        //       : findSkipPages(0, lastIdsAsc, lastAscs) * 12
-        //   : sort == "decs"
-        //     ? lastDescs[Number(page) - 1] && lastIdsDesc[Number(page) - 1]
-        //       ? 0
-        //       : Number(page) - 1
-        //         ? findSkipPages(Number(page) - 1, lastIdsDesc, lastDescs) * 12
-        //         : findSkipPages(0, lastIdsDesc, lastDescs) * 12
-        //     : 0,
         page ? (Number(page) - 1) * 12 : 0,
       last:
-        // sort == "asc"
-        //   ? lastAscs[Number(page) - 1] && lastIdsAsc[Number(page) - 1]
-        //     ? 12
-        //     : Number(page) - 1
-        //       ? findSkipPages(Number(page) - 1, lastIdsAsc, lastAscs) * 12 + 12
-        //       : findSkipPages(0, lastIdsAsc, lastAscs) * 12 + 12
-        //   : sort == "decs"
-        //     ? lastDescs[Number(page) - 1] && lastIdsDesc[Number(page) - 1]
-        //       ? 12
-        //       : Number(page) - 1
-        //         ? findSkipPages(Number(page) - 1, lastIdsDesc, lastDescs) * 12 +
-        //           12
-        //         : findSkipPages(0, lastIdsDesc, lastDescs) * 12 + 12
-        //     : 12,
         page ? Number(page) * 12 : 12,
     },
     {

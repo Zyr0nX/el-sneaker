@@ -59,7 +59,6 @@ export default async function ProductDetail({
       next: { tags: ["sneaker"] },
     }
   );
-  console.log(sneakerContent);
   if (!sneakerContent) return null;
 
   const sneakerDetailQuery = groq`*[_type == "sneakerDetail"][0]{

@@ -101,7 +101,6 @@ export default function Filter({
   }
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("Here")
     const params = new URLSearchParams(searchParams.toString());
 
     if (data.brands.length > 0) {
