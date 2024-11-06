@@ -6,6 +6,7 @@ import { beVietnamPro } from "~/utils/font/be-vietnam-pro";
 import Header from "~/components/header";
 import Footer from "~/components/footer";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   title: "El.sneaker",
@@ -28,6 +29,7 @@ export default function RootLayout({
             <Footer />
         </ClientProviders>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
