@@ -76,6 +76,7 @@ export default function Filter({
   const maxPrice = form.watch("maxPrice");
 
   useEffect(() => {
+    console.log(minPrice, maxPrice);
     if (maxPrice === 1000000 && !minPrice) {
       setRadioValue("below-1000000");
     } else if (minPrice === 1000000 && maxPrice === 3000000) {
@@ -422,7 +423,7 @@ export default function Filter({
                   value={radioValue}
                   onValueChange={(value) => {
                     if (value === "below-1000000") {
-                      form.resetField("minPrice");
+                      form.setValue("minPrice", null);
                       form.setValue("maxPrice", 1000000);
                     }
 
@@ -433,7 +434,7 @@ export default function Filter({
 
                     if (value === "above-3000000") {
                       form.setValue("minPrice", 3000000);
-                      form.resetField("maxPrice");
+                      form.setValue("maxPrice", null);
                     }
                     setRadioValue(value);
                   }}
