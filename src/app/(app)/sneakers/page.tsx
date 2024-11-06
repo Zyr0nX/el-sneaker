@@ -97,14 +97,14 @@ export default async function PostIndex({
                 brands: searchParams.brands,
                 sizes: searchParams.sizes,
                 collections: searchParams.collections,
-                from: searchParams.minPrice,
-                to: searchParams.maxPrice,
+                minPrice: searchParams.minPrice,
+                maxPrice: searchParams.maxPrice,
               })}
               brands={searchParams.brands}
               sizes={searchParams.sizes}
               collections={searchParams.collections}
-              from={searchParams.minPrice}
-              to={searchParams.maxPrice}
+              minPrice={searchParams.minPrice}
+              maxPrice={searchParams.maxPrice}
             />
           </Suspense>
         </div>

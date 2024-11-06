@@ -17,21 +17,21 @@ export default async function ProductPaginationProvider({
   brands,
   sizes,
   collections,
-  from,
-  to,
+  minPrice,
+  maxPrice,
 }: {
   brands?: string;
   sizes?: string;
   collections?: string;
-  from?: string;
-  to?: string;
+  minPrice?: string;
+  maxPrice?: string;
 }) {
   const productCountQuery = groq`count(*[_type == "sneaker" 
       && (!defined($brands) || brand->slug.current in $brands)
       && (!defined($collections) || collection->slug.current in $collections)
       && (!defined($sizes) || count((sizes[out_of_stock != true].size)[@ in $sizes]) > 0)
-      && (!defined($from) || price >= $from)
-      && (!defined($to) || price <= $to)
+      && (!defined($minPrice) || price >= $minPrice)
+      && (!defined($maxPrice) || price <= $maxPrice)
     ])`;
 
   const productCount = await client.fetch<ProductCountQueryResult>(
@@ -45,14 +45,13 @@ export default async function ProductPaginationProvider({
             .map((item) => Number(item))
         : null,
       collections: collections ? collections.split(",") : null,
-      from: from || null,
-      to: to || null,
-    }
+      minPrice: minPrice ? parseInt(minPrice) || "" : null,
+      maxPrice: maxPrice ? parseInt(maxPrice) || "" : null,
+    },
+    { next: { tags: ["sneaker"] } }
   );
 
   if (productCount <= 12) return null;
 
-  return (
-    <ProductPagination total={productCount} />
-  );
+  return <ProductPagination total={productCount} />;
 }

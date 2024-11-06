@@ -35,11 +35,11 @@ export default async function ProductCount({
             .map((item) => Number(item))
         : null,
       collections: collections ? collections.split(",") : null,
-      minPrice: minPrice || null,
-      maxPrice: maxPrice || null,
+      minPrice: minPrice ? parseInt(minPrice) || "" : null,
+      maxPrice: maxPrice ? parseInt(maxPrice) || "" : null,
     },
     {
-      next: { tags: ["sneaker"] }
+      next: { tags: ["sneaker"] },
     }
   );
 

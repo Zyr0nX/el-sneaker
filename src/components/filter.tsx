@@ -422,7 +422,6 @@ export default function Filter({
                   className="flex flex-col gap-4"
                   value={radioValue}
                   onValueChange={(value) => {
-                    setRadioValue(value);
                     if (value === "below-1000000") {
                       form.resetField("minPrice");
                       form.setValue("maxPrice", 1000000);
@@ -437,6 +436,7 @@ export default function Filter({
                       form.setValue("minPrice", 3000000);
                       form.resetField("maxPrice");
                     }
+                    setRadioValue(value);
                   }}
                 >
                   <div className="flex items-center gap-4">

@@ -115,7 +115,11 @@ export default async function ProductListProvider({
     return skipPages;
   }
 
-  const sneakerList = await client.fetch<SneakerListQueryAscResult | SneakerListQueryDescResult | SneakerListQueryPopularResult>(
+  const sneakerList = await client.fetch<
+    | SneakerListQueryAscResult
+    | SneakerListQueryDescResult
+    | SneakerListQueryPopularResult
+  >(
     sneakerListQuery,
     {
       brands: brands ? brands.split(",") : null,
@@ -126,8 +130,8 @@ export default async function ProductListProvider({
             .map((item) => Number(item))
         : null,
       collections: collections ? collections.split(",") : null,
-      minPrice: minPrice || null,
-      maxPrice: maxPrice || null,
+      minPrice: minPrice ? parseInt(minPrice) || "" : null,
+      maxPrice: maxPrice ? parseInt(maxPrice) || "" : null,
       lastAscs: page
         ? lastAscs[Number(page) - 1]
           ? lastAscs[Number(page) - 1]
