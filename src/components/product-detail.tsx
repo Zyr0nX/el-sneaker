@@ -86,48 +86,52 @@ export default async function ProductDetail({
   return (
     <div className="px-5 py-5 md:px-[6.25rem] md:py-11 flex gap-[4.5rem] w-full">
       <div className="max-w-full w-1/2 hidden md:block">
-        {sneakerContent.images && sneakerContent.images.length > 0 && (
-          <Carousel>
-            <div className="flex flex-col gap-6">
-              <div className="flex items-center justify-between gap-4">
-                <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100" />
-                <CarouselContent>
-                  {sneakerContent.images.map((image) => (
-                    <CarouselItem
-                      className="rounded-2xl overflow-hidden"
-                      key={image.key}
-                    >
-                      <EasyZoomOnMove
-                        mainImage={{
-                          src: urlFor(image.ref!)
-                            .auto("format")
-                            .fit("max")
-                            .quality(75)
-                            .url(),
-                          alt: "My Product",
-                        }}
-                        zoomImage={{
-                          src: urlFor(image.ref!)
-                            .auto("format")
-                            .fit("max")
-                            .quality(100)
-                            .url(),
-                          alt: "My Product Zoom",
-                        }}
-                        loadingIndicator={<></>}
-                        delayTimer={1000}
-                      />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
+        {sneakerContent.images &&
+          sneakerContent.images.filter((image) => image.ref != null).length >
+            0 && (
+            <Carousel>
+              <div className="flex flex-col gap-6">
+                <div className="flex items-center justify-between gap-4">
+                  <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100" />
+                  <CarouselContent>
+                    {sneakerContent.images
+                      .filter((image) => image.ref != null)
+                      .map((image) => (
+                        <CarouselItem
+                          className="rounded-2xl overflow-hidden"
+                          key={image.key}
+                        >
+                          <EasyZoomOnMove
+                            mainImage={{
+                              src: urlFor(image.ref!)
+                                .auto("format")
+                                .fit("max")
+                                .quality(75)
+                                .url(),
+                              alt: "My Product",
+                            }}
+                            zoomImage={{
+                              src: urlFor(image.ref!)
+                                .auto("format")
+                                .fit("max")
+                                .quality(100)
+                                .url(),
+                              alt: "My Product Zoom",
+                            }}
+                            loadingIndicator={<></>}
+                            delayTimer={1000}
+                          />
+                        </CarouselItem>
+                      ))}
+                  </CarouselContent>
 
-                <CarouselNext className="static shrink-0 -translate-y-0  bg-neutral-100" />
+                  <CarouselNext className="static shrink-0 -translate-y-0  bg-neutral-100" />
+                </div>
+
+                <Thumbs images={sneakerContent.images} />
               </div>
-
-              <Thumbs images={sneakerContent.images} />
-            </div>
-          </Carousel>
-        )}
+            </Carousel>
+          )}
       </div>
 
       <div className="flex flex-col gap-3 md:gap-8">
@@ -144,48 +148,52 @@ export default async function ProductDetail({
           <ProductDetailPrice sizes={sneakerContent.sizes} price={price} />
         </div>
         <div className="md:hidden">
-          {sneakerContent.images && sneakerContent.images.length > 0 && (
-            <Carousel>
-              <div className="flex flex-col gap-6">
-                <div className="flex items-center justify-between gap-1 md:gap-4">
-                  <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100 hidden md:block" />
-                  <CarouselContent>
-                    {sneakerContent.images.map((image) => (
-                      <CarouselItem
-                        className="rounded-2xl overflow-hidden"
-                        key={image.key}
-                      >
-                        <EasyZoomOnMove
-                          mainImage={{
-                            src: urlFor(image.ref!)
-                              .auto("format")
-                              .fit("max")
-                              .quality(75)
-                              .url(),
-                            alt: "My Product",
-                          }}
-                          zoomImage={{
-                            src: urlFor(image.ref!)
-                              .auto("format")
-                              .fit("max")
-                              .quality(100)
-                              .url(),
-                            alt: "My Product Zoom",
-                          }}
-                          loadingIndicator={<></>}
-                          delayTimer={1000}
-                        />
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
+          {sneakerContent.images &&
+            sneakerContent.images.filter((image) => image.ref != null).length >
+              0 && (
+              <Carousel>
+                <div className="flex flex-col gap-6">
+                  <div className="flex items-center justify-between gap-1 md:gap-4">
+                    <CarouselPrevious className="static shrink-0 -translate-y-0 bg-neutral-100 hidden md:block" />
+                    <CarouselContent>
+                      {sneakerContent.images
+                        .filter((image) => image.ref != null)
+                        .map((image) => (
+                          <CarouselItem
+                            className="rounded-2xl overflow-hidden"
+                            key={image.key}
+                          >
+                            <EasyZoomOnMove
+                              mainImage={{
+                                src: urlFor(image.ref!)
+                                  .auto("format")
+                                  .fit("max")
+                                  .quality(75)
+                                  .url(),
+                                alt: "My Product",
+                              }}
+                              zoomImage={{
+                                src: urlFor(image.ref!)
+                                  .auto("format")
+                                  .fit("max")
+                                  .quality(100)
+                                  .url(),
+                                alt: "My Product Zoom",
+                              }}
+                              loadingIndicator={<></>}
+                              delayTimer={1000}
+                            />
+                          </CarouselItem>
+                        ))}
+                    </CarouselContent>
 
-                  <CarouselNext className="static shrink-0 -translate-y-0  bg-neutral-100 hidden md:block" />
+                    <CarouselNext className="static shrink-0 -translate-y-0  bg-neutral-100 hidden md:block" />
+                  </div>
+
+                  <Thumbs images={sneakerContent.images} />
                 </div>
-
-                <Thumbs images={sneakerContent.images} />
-              </div>
-            </Carousel>
-          )}
+              </Carousel>
+            )}
         </div>
 
         <div className="flex flex-col gap-4">
@@ -202,7 +210,10 @@ export default async function ProductDetail({
           {sneakerContent.sizes && sneakerContent.sizes.length > 0 && (
             <ProductDetailSize
               sizes={sneakerContent.sizes
-                .map((size) => size.size)
+                .map((size) => ({
+                  size: size.size,
+                  out_of_stock: size.out_of_stock,
+                }))
                 .filter((size) => size !== null)}
             />
           )}

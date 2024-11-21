@@ -15,6 +15,7 @@ const buttonVariants = cva(
           "bg-white border border-brand-500 text-brand-500 hover:bg-brand-100",
         ghost: "bg-transparent hover:bg-brand-100",
         text: "text-brand-500",
+        disable: "text-neutral-300 bg-neutral-100 border-neutral-200",
       },
       size: {
         sm: "text-sm py-1.5 px-3",
