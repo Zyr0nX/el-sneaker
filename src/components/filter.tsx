@@ -104,6 +104,8 @@ export default function Filter({
   function onSubmit(data: z.infer<typeof FormSchema>) {
     const params = new URLSearchParams(searchParams.toString());
 
+    params.delete("page");
+
     if (data.brands.length > 0) {
       createQueryString(params, "brands", data.brands.join(","));
     } else {
