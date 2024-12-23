@@ -23,7 +23,8 @@ export default function ProductDetailSize({
           }
           onClick={() => {
             if (size.out_of_stock) return;
-            router.replace(`?size=${size}`);
+            console.log(size.size);
+            router.replace(`?size=${size.size}`);
           }}
         >
           {size.size}
